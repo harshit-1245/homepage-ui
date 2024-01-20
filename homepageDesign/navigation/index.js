@@ -58,10 +58,11 @@ export default function AppNavigation() {
   };
 
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
+    
       <Stack.Navigator initialRouteName='Main'>
         <Stack.Screen name='Main' component={BottomTabs} options={{ headerShown: false }} />
       </Stack.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 }

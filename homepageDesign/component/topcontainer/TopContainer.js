@@ -72,26 +72,23 @@ const TopContainer = () => {
 export default TopContainer
 
 const styles=StyleSheet.create({
-    topContainer:{
-        flex:0.28,
-        justifyContent:'flex-start',
-        paddingVertical:'0.6%',
-       
-    },
-
-    container:{
-        flex:1,
-        flexDirection:'column'
-    },
-
-    banner:{
-        flex:0.5,
-        flexDirection:'row'
-    },
-    horizontalBanner:{
-        flex:1,
-        flexDirection:'row'
-    },
+  topContainer: {
+    flex: 0.28,
+    justifyContent: 'flex-start',
+    paddingVertical: '0.6%',
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  banner: {
+    flex: 0.5,
+    flexDirection: 'row',
+  },
+  horizontalBanner: {
+    flex: 1,
+    flexDirection: 'row',
+  },
 
     flipkart: {
         flex: 0.5,
