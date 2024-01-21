@@ -9,6 +9,7 @@ import NotificationScreen from '../screens/Stacks/NotificationScreen';
 import AccountScreen from '../screens/Stacks/AccountScreen';
 import CartScreen from '../screens/Stacks/CartScreen';
 import { Text } from 'react-native';
+import SearchScreen from '../screens/Stacks/SearchScreen';
 
 const Stack = createNativeStackNavigator();
 const MaterialBottomTab = createMaterialBottomTabNavigator();
@@ -58,11 +59,12 @@ export default function AppNavigation() {
   };
 
   return (
-    // <NavigationContainer>
+    <NavigationContainer>
     
       <Stack.Navigator initialRouteName='Main'>
         <Stack.Screen name='Main' component={BottomTabs} options={{ headerShown: false }} />
+        <Stack.Screen name='Search' component={SearchScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
-    // </NavigationContainer>
+    </NavigationContainer>
   );
 }

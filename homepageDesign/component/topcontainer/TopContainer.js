@@ -1,71 +1,86 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, Image, Dimensions, Pressable, TextInput} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Text, Image, Dimensions, Pressable, TextInput, TouchableOpacity} from "react-native";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import {useNavigation} from "@react-navigation/native"
+
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
 const TopContainer = () => {
+  const navigation=useNavigation()
+
 
     //test case for login 
     const [login,setLogin]=useState(false)
+
+    
+    
+    
 
   const testingFunction=()=>{
     setLogin(!login)
   }
   return (
     <View style={styles.topContainer}>
-    <View style={styles.container}>
-      <View style={styles.banner}>
-        <View style={styles.horizontalBanner}>
-          <Pressable style={styles.flipkart}>
-            <Image style={styles.fkLogoImage} source={require('../../assets/lelekart-assests.png')} />
-            <Text style={styles.flipkartName}>lelekart</Text>
-          </Pressable>
+      <View style={styles.container}>
+        <View style={styles.banner}>
+          <View style={styles.horizontalBanner}>
+            <Pressable style={styles.flipkart}>
+              <Image style={styles.fkLogoImage} source={require('../../assets/lelekart-assests.png')} />
+              <Text style={styles.flipkartName}>lelekart</Text>
+            </Pressable>
 
-          <Pressable onPress={testingFunction} style={login ? styles.LoginContainer : styles.Groceryflipkart}>
-  {login ? (
-    <Text style={styles.Login}>Login</Text>
-  ) : (
-    <>
-      <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} />
-      <Text style={styles.groceryName}>Grocery</Text>
-    </>
-  )}
-</Pressable>
+            <Pressable onPress={testingFunction} style={login ? styles.LoginContainer : styles.Groceryflipkart}>
+              {login ? (
+                <Text style={styles.Login}>Login</Text>
+              ) : (
+                <>
+                  <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} />
+                  <Text style={styles.groceryName}>Grocery</Text>
+                </>
+              )}
+            </Pressable>
 
+          </View>
         </View>
-      </View>
 
-      <View style={styles.searchBar}>
-        <View style={styles.horizontalBanner}>
-          <View style={styles.brandMail}>
-            <View>
-              <Text style={styles.brandMailText}>Brand Mail</Text>
-              <Text style={styles.brandMailTextOff}>⚪  OFF</Text>
+        <View style={styles.searchBar}>
+          <View style={styles.horizontalBanner}>
+            <View style={styles.brandMail}>
+              <View>
+                <Text style={styles.brandMailText}>Brand Mail</Text>
+                <Text style={styles.brandMailTextOff}>⚪  OFF</Text>
+              </View>
+            </View>
+            
+            <View style={styles.textInput}>
+            <Pressable onPress={()=>navigation.navigate("Search")} style={styles.textInput}>
+              
+                <Text style={styles.searchIcon}>
+                  <FontAwesome name="search" style={{ fontSize: RFPercentage(4), fontWeight: '500' }} />
+                </Text>
+            
+
+              <View style={styles.textInputBox} /><Text>Search for products</Text>
+              </Pressable>
+              <Text style={styles.cameraIcon}>
+                <AntDesign name="camera" style={{ fontSize: RFPercentage(4), fontWeight: '600' }} />
+              </Text>
+              <Text style={styles.micIcon}>
+                <MaterialCommunityIcons name="microphone-outline" style={{ fontSize: RFPercentage(4) }} />
+              </Text>
+
             </View>
           </View>
-          <View style={styles.textInput}>
-            <Text style={styles.searchIcon}>
-              <FontAwesome name="search" style={{ fontSize: RFPercentage(4), fontWeight: '500' }} />
-            </Text>
-            <TextInput style={styles.textInputBox} placeholder="Search for products" />
-            <Text style={styles.cameraIcon}>
-              <AntDesign name="camera" style={{ fontSize: RFPercentage(4), fontWeight: '600' }} />
-            </Text>
-            <Text style={styles.micIcon}>
-              <MaterialCommunityIcons name="microphone-outline" style={{ fontSize: RFPercentage(4) }} />
-            </Text>
-          </View>
-        </View>
 
-        <View></View>
+          <View></View>
+        </View>
       </View>
     </View>
-  </View>
   )
 }
 
@@ -174,6 +189,14 @@ const styles=StyleSheet.create({
         flex: 0.5,
         height: Height * 0.045,
       },
+      textInputContainer: {
+        flex: 0.8,
+        flexDirection: 'row',
+        backgroundColor: '#d6d0d6',
+        margin: '2%',
+        borderRadius: 5,
+        alignItems: 'center', // Centering the content vertically
+      },
       
       groceryName: {
         flex: 0.7,
@@ -205,6 +228,7 @@ const styles=StyleSheet.create({
         margin: '2%',
         borderRadius: 5,
         alignItems: 'center', // Centering the content vertically
+        
       },
 
     brandMailText:{
@@ -232,7 +256,8 @@ const styles=StyleSheet.create({
 
     cameraIcon:{
         paddingLeft:60,
-        marginVertical:'2.5%'
+        marginVertical:'2.5%',
+        
     },
 
     micIcon:{

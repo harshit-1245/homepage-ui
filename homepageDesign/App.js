@@ -11,9 +11,9 @@ import AppNaviagtion from './navigation/index';
 export default function App() {
   return (
     <>
-     <NavigationContainer>
+     {/* <NavigationContainer> */}
   <AppNaviagtion/>
-  </NavigationContainer>
+  {/* </NavigationContainer> */}
     </>
   );
 }
