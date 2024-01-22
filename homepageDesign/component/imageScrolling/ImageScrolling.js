@@ -2,6 +2,7 @@ import React from 'react';
 import { SliderBox } from 'react-native-image-slider-box';
 import { Image, View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
+import SliderBoxScrollView from './SliderBoxScrollView';
 
 const ImageScrolling = ({ style }) => {
   // Images for the slider
@@ -14,15 +15,7 @@ const ImageScrolling = ({ style }) => {
   return (
     <View style={[styles.imageScrollingContainer, style]}>
       {/* Use SliderBox to display images */}
-      <SliderBox
-        images={images}
-        sliderBoxHeight={200} // Adjust the height of the slider box as needed
-        dotColor="#FFEE58"
-        inactiveDotColor="#90A4AE"
-        paginationBoxVerticalPadding={0}
-        autoplay
-        circleLoop
-      />
+      <SliderBoxScrollView images={images} sliderBoxHeight={200} />
     </View>
   );
 };

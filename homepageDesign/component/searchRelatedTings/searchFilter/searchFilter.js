@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -29,7 +29,8 @@ const SearchFilter = ({ input }) => {
   };
 
   // Render each product item
-  const renderProductItem = ({ item }) => (
+  //usecallback
+  const renderProductItem = useCallback(({ item }) => (
     <Pressable onPress={() => handleProductClick(item.id)} style={styles.pressableContainer}>
       <View style={styles.productItem}>
         <View style={styles.imageContainer}>
@@ -44,13 +45,14 @@ const SearchFilter = ({ input }) => {
         </View>
       </View>
     </Pressable>
-  );
+  ),[handleProductClick])
 
   return (
+    //avoid using too much view
     <View style={styles.container}>
       <FlatList
         data={filteredProducts}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()} //read docs
         renderItem={renderProductItem}
       />
     </View>

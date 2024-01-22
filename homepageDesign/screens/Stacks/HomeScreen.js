@@ -2,8 +2,10 @@
 import { ScrollView, StyleSheet, View, ViewPropTypes } from 'react-native';
 import React from 'react';
 import TopContainer from '../../component/topcontainer/TopContainer';
-import ImageScrolling from '../../component/imageScrolling/imageSrolling';
+
 import TrandingList from '../../component/trandingList/TrandingList';
+import ImageScrolling from '../../component/imageScrolling/ImageScrolling';
+import Category from '../../component/category-home/Category';
 
 const HomeScreen = () => {
   return (
@@ -12,7 +14,7 @@ const HomeScreen = () => {
         
           <TopContainer />
           <ImageScrolling style={styles.customImageScrolling} />
-          <TrandingList />
+          <Category/>
       
       </ScrollView>
     </>
