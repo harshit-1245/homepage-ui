@@ -19,6 +19,7 @@
     "deepmerge": "^4.3.1",
     "deprecated-react-native-prop-types": "^2.2.0",
     "expo": "^50.0.2",
+    "expo-image-picker": "~14.7.1",
     "expo-status-bar": "~1.11.1",
     "hoist-non-react-statics": "^3.3.2",
     "react": "^18.2.0",
@@ -34,8 +35,7 @@
     "react-native-typing-animation": "^0.1.7",
     "react-native-typing-text": "^0.0.3",
     "react-native-vector-icons": "^10.0.3",
-    "react-native-voice": "^0.3.0",
-    "expo-image-picker": "~14.7.1"
+    "react-native-voice": "^0.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

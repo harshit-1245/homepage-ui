@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { list } from '../../json/list';
+import {useNavigation} from "@react-navigation/native"
 
 const Category = () => {
+  const navigation=useNavigation()
+
+  const handlePress=()=>{
+    navigation.navigate("Category")
+  }
+
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.container}>
       
       <View style={styles.categoryContainer}>
         {list.map((item) => (
-          <Pressable key={item.id} style={styles.categoryItem}>
+          <Pressable onPress={handlePress} key={item.id} style={styles.categoryItem}>
             <Image style={styles.categoryImage} source={{ uri: item.image }} />
             <Text style={styles.categoryText}>{item.name}</Text>
           </Pressable>
@@ -20,7 +27,7 @@ const Category = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: 30,
   },
   heading: {
     fontSize: 18,
@@ -36,8 +43,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   categoryImage: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 40,
     marginBottom: 5,
   },
