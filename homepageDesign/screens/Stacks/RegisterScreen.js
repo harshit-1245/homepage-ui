@@ -15,41 +15,47 @@ import { Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
 import Button from '../../buttons/Buttons';
 import { useForm, Controller } from 'react-hook-form';
-import { useNavigation } from "@react-navigation/native";
-
+import { useNavigation } from '@react-navigation/native';
+import useAuthStore from '../../src/store/authStore'; // Replace with the correct path
 
 const RegisterScreen = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const {
+    email,
+    mobileNumber,
+    password,
+    confirmPassword,
+    isChecked,
+    isPasswordShown,
+    isConfirmedPasswordShown,
+    setField,
+    togglePasswordVisibility,
+    resetForm,
+  } = useAuthStore();
+
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitSuccessful },
-    getValues,
     setValue,
+    getValues,
   } = useForm();
 
-  const [isPasswordShown, setIsPasswordShown] = React.useState(false);
-  const [isConfirmedPasswordShown, setIsConfirmedPasswordShown] = React.useState(false);
-  const [isChecked, setIsChecked] = React.useState(false);
-
-  const onSubmit = (data) => {
-    
+  const onSubmit = async (data) => {
+    console.log(data);
     // Handle submission logic here
   };
-  const navigatingToLogin=()=>{
-    navigation.navigate("Login")
-  }
+
+  const navigatingToLogin = () => {
+    navigation.navigate('Login');
+  };
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       // Reset the form after successful submission
-      setValue('email', '');
-      setValue('mobileNumber', '');
-      setValue('password', '');
-      setValue('confirmPassword', '');
-      setIsChecked(false);
+      resetForm();
     }
-  }, [isSubmitSuccessful, setValue]);
+  }, [isSubmitSuccessful, resetForm]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -126,7 +132,7 @@ const RegisterScreen = () => {
 
               <Controller
                 control={control}
-                render={({ field: { onBlur, value } }) => (
+                render={({ field: { onBlur, onChange, value } }) => (
                   <View
                     style={{
                       width: '100%',
@@ -200,7 +206,7 @@ const RegisterScreen = () => {
                     <TextInput
                       placeholder="Enter your password"
                       placeholderTextColor={'black'}
-                      secureTextEntry={isPasswordShown}
+                      secureTextEntry={!isPasswordShown}
                       style={{
                         width: '100%',
                       }}
@@ -210,7 +216,7 @@ const RegisterScreen = () => {
                     />
 
                     <TouchableOpacity
-                      onPress={() => setIsPasswordShown(!isPasswordShown)}
+                      onPress={() => togglePasswordVisibility('isPasswordShown')}
                       style={{
                         position: 'absolute',
                         right: 12,
@@ -255,7 +261,7 @@ const RegisterScreen = () => {
                     <TextInput
                       placeholder="Re-enter your password"
                       placeholderTextColor={'black'}
-                      secureTextEntry={isConfirmedPasswordShown}
+                      secureTextEntry={!isConfirmedPasswordShown}
                       style={{
                         width: '100%',
                       }}
@@ -265,7 +271,7 @@ const RegisterScreen = () => {
                     />
 
                     <TouchableOpacity
-                      onPress={() => setIsConfirmedPasswordShown(!isConfirmedPasswordShown)}
+                      onPress={() => togglePasswordVisibility('isConfirmedPasswordShown')}
                       style={{
                         position: 'absolute',
                         right: 12,
@@ -297,9 +303,7 @@ const RegisterScreen = () => {
                 style={{ marginRight: 8 }}
                 value={isChecked}
                 onValueChange={(value) => {
-                  setIsChecked(value);
-                  // Trigger validation on checkbox change
-                  getValues('confirmPassword');
+                  setField('isChecked', value);
                 }}
                 color={isChecked ? '#007260' : undefined}
               />

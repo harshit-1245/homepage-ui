@@ -12,18 +12,29 @@ import {
   StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 import Button from '../../buttons/Buttons'; // Assuming you have a Button component
 import { useNavigation } from "@react-navigation/native";
+import useAuthStore from '../../src/store/loginAuthStore'; // Replace with the correct path
 
 const LoginScreen = () => {
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [isEmailModalVisible, setIsEmailModalVisible] = useState(false);
-  const [isForgotPasswordModalVisible, setIsForgotPasswordModalVisible] = useState(false);
-  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+  const {
+    isPasswordShown,
+    isEmailModalVisible,
+    isForgotPasswordModalVisible,
+    forgotPasswordEmail,
+    setField,
+    togglePasswordVisibility,
+    setIsEmailModalVisible,
+    setIsForgotPasswordModalVisible,
+    setForgotPasswordEmail,
+  } = useAuthStore();
+
   const navigation = useNavigation();
 
-  const handleEmailLogin = (email, password) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleEmailLogin = () => {
     // Handle email login logic here
     console.log('Email Login:', email, password);
     // Close the modal after handling login logic
@@ -54,8 +65,6 @@ const LoginScreen = () => {
       >
         <ScrollView contentContainerStyle={styles.scrollViewContainer}>
           <View style={styles.innerContainer}>
-           
-
             <View style={styles.titleContainer}>
               <Text style={styles.titleText}>Login</Text>
             </View>
@@ -68,6 +77,8 @@ const LoginScreen = () => {
                 placeholderTextColor={'black'}
                 keyboardType="email-address"
                 style={styles.inputField}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
               />
             </View>
 
@@ -79,27 +90,31 @@ const LoginScreen = () => {
                 placeholderTextColor={'black'}
                 secureTextEntry={!isPasswordShown}
                 style={styles.inputField}
+                value={password}
+                onChangeText={(text) => setPassword(text)}
               />
-               <View style={styles.upperContainer}>
-              {/* Login with Phone Number */}
-              <TouchableOpacity
-                onPress={handleNavigation}
-                style={styles.phoneNumberContainer}
-              >
-                <Text style={styles.phoneNumberLinkText}>Login with Phone Number</Text>
-              </TouchableOpacity>
+              <View style={styles.upperContainer}>
+                {/* Login with Phone Number */}
+                <TouchableOpacity
+                  onPress={handleNavigation}
+                  style={styles.phoneNumberContainer}
+                >
+                  <Text style={styles.phoneNumberLinkText}>Login with Phone Number</Text>
+                </TouchableOpacity>
 
-              {/* Forgot Password */}
-              <TouchableOpacity onPress={handleForgotPassword}>
-                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-              </TouchableOpacity>
+                {/* Forgot Password */}
+                <TouchableOpacity onPress={handleForgotPassword}>
+                  <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            </View>
-               
+
             <Button
               title="Login with Email"
               filled
-              onPress={() => setIsEmailModalVisible(true)}
+              onPress={() => {
+                handleEmailLogin(); // No need to pass email and password here
+              }}
               style={styles.loginButton}
             />
           </View>
