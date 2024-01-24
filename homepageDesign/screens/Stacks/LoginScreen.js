@@ -1,48 +1,23 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  Modal,
-  Pressable,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Modal, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Button from '../../buttons/Buttons'; // Assuming you have a Button component
-import { useNavigation } from "@react-navigation/native";
-import useAuthStore from '../../src/store/loginAuthStore'; // Replace with the correct path
+import { Button as PaperButton, TextInput as PaperTextInput } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import useAuthStore from '../../src/store/loginAuthStore';
 
 const LoginScreen = () => {
-  const {
-    isPasswordShown,
-    isEmailModalVisible,
-    isForgotPasswordModalVisible,
-    forgotPasswordEmail,
-    setField,
-    togglePasswordVisibility,
-    setIsEmailModalVisible,
-    setIsForgotPasswordModalVisible,
-    setForgotPasswordEmail,
-  } = useAuthStore();
-
+  const { isPasswordShown, isEmailModalVisible, isForgotPasswordModalVisible, forgotPasswordEmail, setField, togglePasswordVisibility, setIsEmailModalVisible, setIsForgotPasswordModalVisible, setForgotPasswordEmail } = useAuthStore();
   const navigation = useNavigation();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleEmailLogin = () => {
-    // Handle email login logic here
     console.log('Email Login:', email, password);
-    // Close the modal after handling login logic
     setIsEmailModalVisible(false);
   };
 
   const handleNavigation = () => {
-    navigation.navigate("Mobile");
+    navigation.navigate('Mobile');
   };
 
   const handleForgotPassword = () => {
@@ -50,10 +25,12 @@ const LoginScreen = () => {
   };
 
   const handleSendVerification = () => {
-    // Handle send verification logic here
     console.log('Send verification email to:', forgotPasswordEmail);
-    // Close the modal after handling verification logic
     setIsForgotPasswordModalVisible(false);
+  };
+
+  const handleSignup = () => {
+    navigation.navigate('Register');
   };
 
   return (
@@ -72,7 +49,7 @@ const LoginScreen = () => {
             {/* Email Login */}
             <View style={styles.inputContainer}>
               <Text style={styles.labelText}>Email address</Text>
-              <TextInput
+              <PaperTextInput
                 placeholder="Enter your email address"
                 placeholderTextColor={'black'}
                 keyboardType="email-address"
@@ -85,7 +62,7 @@ const LoginScreen = () => {
             {/* Password Login */}
             <View style={styles.inputContainer}>
               <Text style={styles.labelText}>Password</Text>
-              <TextInput
+              <PaperTextInput
                 placeholder="Enter your password"
                 placeholderTextColor={'black'}
                 secureTextEntry={!isPasswordShown}
@@ -109,14 +86,29 @@ const LoginScreen = () => {
               </View>
             </View>
 
-            <Button
-              title="Login with Email"
-              filled
-              onPress={() => {
-                handleEmailLogin(); // No need to pass email and password here
-              }}
+            <PaperButton
+              mode="contained"
+              onPress={handleEmailLogin}
               style={styles.loginButton}
-            />
+            >
+              Login with Email
+            </PaperButton>
+
+            {/* OR Section */}
+            <View style={styles.orContainer}>
+              <View style={styles.orLine} />
+              <Text style={styles.orText}>OR</Text>
+              <View style={styles.orLine} />
+            </View>
+
+            {/* Signup Button */}
+            <PaperButton
+              mode="outlined"
+              onPress={handleSignup}
+              style={styles.signupButton}
+            >
+              Sign up
+            </PaperButton>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -128,53 +120,29 @@ const LoginScreen = () => {
         visible={isForgotPasswordModalVisible}
         onRequestClose={() => setIsForgotPasswordModalVisible(false)}
       >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
-        >
-          <View
-            style={{
-              width: '80%',
-              backgroundColor: 'white',
-              padding: 20,
-              borderRadius: 8,
-            }}
-          >
-            <Text style={{ fontSize: 18, marginBottom: 10 }}>Forgot Password</Text>
-            <TextInput
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Forgot Password</Text>
+            <PaperTextInput
               placeholder="Enter your email address"
               placeholderTextColor={'black'}
               keyboardType="email-address"
-              style={{
-                width: '100%',
-                height: 48,
-                borderColor: 'black',
-                borderWidth: 1,
-                borderRadius: 8,
-                marginBottom: 10,
-                paddingLeft: 22,
-              }}
+              style={styles.inputField}
               value={forgotPasswordEmail}
               onChangeText={(text) => setForgotPasswordEmail(text)}
             />
-            <Button
-              title="Send Verification"
-              filled
+            <PaperButton
+              mode="contained"
               onPress={handleSendVerification}
-              style={{
-                marginTop: 18,
-                marginBottom: 4,
-              }}
-            />
+              style={styles.sendVerificationButton}
+            >
+              Send Verification
+            </PaperButton>
             <Pressable
-              style={{ marginTop: 10 }}
+              style={styles.cancelButton}
               onPress={() => setIsForgotPasswordModalVisible(false)}
             >
-              <Text style={{ color: 'blue' }}>Cancel</Text>
+              <Text style={styles.cancelButtonText}>Cancel</Text>
             </Pressable>
           </View>
         </View>
@@ -195,12 +163,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 22,
     justifyContent: 'center',
-  },
-  upperContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
   },
   titleContainer: {
     marginBottom: 22,
@@ -237,8 +199,60 @@ const styles = StyleSheet.create({
     color: 'blue',
     fontSize: 16,
   },
+  upperContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   loginButton: {
     marginBottom: 24,
+  },
+  orContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  orLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'black',
+    marginHorizontal: 10,
+  },
+  orText: {
+    fontSize: 16,
+    color: 'black',
+  },
+  signupButton: {
+    marginTop: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 8,
+  },
+  modalTitle: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  sendVerificationButton: {
+    marginTop: 18,
+    marginBottom: 4,
+  },
+  cancelButton: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  cancelButtonText: {
+    color: 'blue',
+    fontSize: 16,
   },
 });
 

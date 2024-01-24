@@ -63,13 +63,11 @@ export default function AppNavigation() {
 
   return (
     <NavigationContainer>
-    
-      <Stack.Navigator initialRouteName='Main'>
+      <Stack.Navigator initialRouteName='Login'>
         <Stack.Screen name='Main' component={BottomTabs} options={{ headerShown: false }} />
         <Stack.Screen name='Search' component={SearchScreen} options={{ headerShown: false }} />
         <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
-
         <Stack.Screen name='Mobile' component={MobileLoginSceen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
