@@ -10,6 +10,9 @@ import AccountScreen from '../screens/Stacks/AccountScreen';
 import CartScreen from '../screens/Stacks/CartScreen';
 import { Text } from 'react-native';
 import SearchScreen from '../screens/Stacks/SearchScreen';
+import LoginScreen from '../screens/Stacks/LoginScreen';
+import RegisterScreen from '../screens/Stacks/RegisterScreen';
+import MobileLoginSceen from '../screens/Stacks/MobileLoginSceen';
 
 const Stack = createNativeStackNavigator();
 const MaterialBottomTab = createMaterialBottomTabNavigator();
@@ -64,6 +67,10 @@ export default function AppNavigation() {
       <Stack.Navigator initialRouteName='Main'>
         <Stack.Screen name='Main' component={BottomTabs} options={{ headerShown: false }} />
         <Stack.Screen name='Search' component={SearchScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
+
+        <Stack.Screen name='Mobile' component={MobileLoginSceen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
