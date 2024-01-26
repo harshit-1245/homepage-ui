@@ -11,12 +11,14 @@ import {
   Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+// import {GoogleSignin} from "@react-native-google-signin/google-signin"
 import { Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
 import Button from '../../buttons/Buttons';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import useAuthStore from '../../src/store/authStore'; // Replace with the correct path
+// import { auth, GoogleAuthProvider } from '../../firabaseAuth/firebase'; // Update the path
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -56,6 +58,19 @@ const RegisterScreen = () => {
       resetForm();
     }
   }, [isSubmitSuccessful, resetForm]);
+
+  //handle google signin
+  const handleGoogleSignIn = async () => {
+    try {
+    
+  
+      // Handle successful sign-in
+      console.log('Successfully signed in with Google:');
+    } catch (error) {
+      console.log(error)
+    }
+  };
+  
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -374,7 +389,7 @@ const RegisterScreen = () => {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => console.log('Pressed')}
+                onPress={handleGoogleSignIn}
                 style={{
                   flex: 1,
                   alignItems: 'center',

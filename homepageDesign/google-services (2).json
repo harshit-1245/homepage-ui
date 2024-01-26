@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "813778562318",
+    "project_id": "e-commerce-4bb21",
+    "storage_bucket": "e-commerce-4bb21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813778562318:android:5a29803f091dc21ad3fb5f",
+        "android_client_info": {
+          "package_name": "com.harshit1245.homepageDesign"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbD8YwbkxsK9R0XZj4RCI4gYxEEt5HMpU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
