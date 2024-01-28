@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from "axios"
 import {
   View,
   Text,
@@ -9,16 +10,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import {GoogleSignin} from "@react-native-google-signin/google-signin"
 import { Ionicons } from '@expo/vector-icons';
 import Checkbox from 'expo-checkbox';
-import Button from '../../buttons/Buttons';
+import Button from "../../buttons/Buttons"
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
-import useAuthStore from '../../src/store/authStore'; // Replace with the correct path
-// import { auth, GoogleAuthProvider } from '../../firabaseAuth/firebase'; // Update the path
+import useAuthStore from '../../src/store/authStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -44,10 +48,45 @@ const RegisterScreen = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
-    // Handle submission logic here
+    if (!isChecked) {
+      console.log('Please agree to the terms and conditions.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        'http://192.168.29.163:4000/register',
+        {
+          email: data.email,
+          phone: data.mobileNumber,
+          password: data.password,
+          // Add other data fields as needed
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+  
+      if(response.status === 200){
+        await AsyncStorage.setItem('userToken', response.data.data.authToken);
+        navigation.navigate("Main")
+      }
+    } catch (error) {
+      console.error('API error:', error);
+  
+      // Log the full error response from the server
+      if (error.response) {
+        console.error('Server Response Data:', error.response.data);
+        console.error('Server Response Status:', error.response.status);
+        console.error('Server Response Headers:', error.response.headers);
+      }
+  
+      // Handle error, display error message, etc.
+    }
   };
-
+  
   const navigatingToLogin = () => {
     navigation.navigate('Login');
   };
@@ -59,18 +98,7 @@ const RegisterScreen = () => {
     }
   }, [isSubmitSuccessful, resetForm]);
 
-  //handle google signin
-  const handleGoogleSignIn = async () => {
-    try {
-    
-  
-      // Handle successful sign-in
-      console.log('Successfully signed in with Google:');
-    } catch (error) {
-      console.log(error)
-    }
-  };
-  
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -98,7 +126,6 @@ const RegisterScreen = () => {
               </Text>
             </View>
 
-            {/* Email Address */}
             <View style={{ marginBottom: 12 }}>
               <Text style={{ fontSize: 16, fontWeight: 400, marginVertical: 8 }}>
                 Email address
@@ -139,7 +166,6 @@ const RegisterScreen = () => {
               {errors.email && <Text style={{ color: 'red' }}>{errors.email.message}</Text>}
             </View>
 
-            {/* Mobile Number */}
             <View style={{ marginBottom: 12 }}>
               <Text style={{ fontSize: 16, fontWeight: 400, marginVertical: 8 }}>
                 Mobile Number
@@ -197,7 +223,6 @@ const RegisterScreen = () => {
               )}
             </View>
 
-            {/* Password */}
             <View style={{ marginBottom: 12 }}>
               <Text style={{ fontSize: 16, fontWeight: 400, marginVertical: 8 }}>
                 Password
@@ -252,7 +277,6 @@ const RegisterScreen = () => {
               {errors.password && <Text style={{ color: 'red' }}>{errors.password.message}</Text>}
             </View>
 
-            {/* Confirm Password */}
             <View style={{ marginBottom: 12 }}>
               <Text style={{ fontSize: 16, fontWeight: 400, marginVertical: 8 }}>
                 Confirm Password
@@ -312,7 +336,6 @@ const RegisterScreen = () => {
               )}
             </View>
 
-            {/* Terms and Conditions */}
             <View style={{ flexDirection: 'row', marginVertical: 6 }}>
               <Checkbox
                 style={{ marginRight: 8 }}
@@ -324,6 +347,10 @@ const RegisterScreen = () => {
               />
               <Text>I agree to the terms and conditions</Text>
             </View>
+
+            {!isChecked && (
+              <Text style={{ color: 'red', fontSize: 14, marginTop: 6 }}>Please agree to the terms and conditions.</Text>
+            )}
 
             <Button
               title="Sign Up"
@@ -356,64 +383,7 @@ const RegisterScreen = () => {
               />
             </View>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => console.log('Pressed')}
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'row',
-                  height: 52,
-                  borderWidth: 1,
-                  borderColor: 'gray',
-                  marginRight: 4,
-                  borderRadius: 10,
-                }}
-              >
-                <Image
-                  source={require('../../assets/facebook.png')}
-                  style={{
-                    height: 36,
-                    width: 36,
-                    marginRight: 8,
-                  }}
-                  resizeMode="contain"
-                />
-                <Text>Facebook</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={handleGoogleSignIn}
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'row',
-                  height: 52,
-                  borderWidth: 1,
-                  borderColor: 'gray',
-                  marginRight: 4,
-                  borderRadius: 10,
-                }}
-              >
-                <Image
-                  source={require('../../assets/google.png')}
-                  style={{
-                    height: 36,
-                    width: 36,
-                    marginRight: 8,
-                  }}
-                  resizeMode="contain"
-                />
-                <Text>Google</Text>
-              </TouchableOpacity>
-            </View>
+           
 
             <View
               style={{

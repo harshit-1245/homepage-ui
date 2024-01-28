@@ -1,27 +1,21 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const mongoose = require('mongoose');
+const colors = require('colors');
 
-require("dotenv").config()
+require('dotenv').config();
 
 async function connectDB() {
- ;
-  // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-  const client = new MongoClient(process.env.MONGO_URL, {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    }
-  });
-
   try {
-    // Connect the client to the server (optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+    // Connect to MongoDB using Mongoose
+    await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
+    // Connection successful
+    console.log(colors.green.bold("Connected to MongoDB using Mongoose!"));
+  } catch (error) {
+    // Connection failed
+    console.error(colors.red.bold(`Error connecting to MongoDB: ${error.message}`));
   }
 }
 

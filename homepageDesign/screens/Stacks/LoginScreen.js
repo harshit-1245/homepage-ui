@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Modal, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Modal, Pressable, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button as PaperButton, TextInput as PaperTextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import useAuthStore from '../../src/store/loginAuthStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios"
 
 const LoginScreen = () => {
   const { isPasswordShown, isEmailModalVisible, isForgotPasswordModalVisible, forgotPasswordEmail, setField, togglePasswordVisibility, setIsEmailModalVisible, setIsForgotPasswordModalVisible, setForgotPasswordEmail } = useAuthStore();
@@ -11,10 +13,33 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleEmailLogin = () => {
-    console.log('Email Login:', email, password);
-    setIsEmailModalVisible(false);
+  const handleEmailLogin = async () => {
+    try {
+      const response = await axios.post(
+        'http://192.168.29.163:4000/login', // Replace with your server endpoint
+        {
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+// If the login was successful, you might want to navigate to another screen or perform additional actions.
+if(response.status === 200){
+  await AsyncStorage.setItem('authToken', response.data.data.authToken);
+
+  navigation.navigate("Main")
+}
+    } catch (error) {
+      console.error('API error:', error.response.data);
+
+      // Handle the error, display an error message, or perform other actions.
+    }
   };
+  
 
   const handleNavigation = () => {
     navigation.navigate('Mobile');
@@ -27,10 +52,6 @@ const LoginScreen = () => {
   const handleSendVerification = () => {
     console.log('Send verification email to:', forgotPasswordEmail);
     setIsForgotPasswordModalVisible(false);
-  };
-
-  const handleSignup = () => {
-    navigation.navigate('Register');
   };
 
   return (
@@ -101,14 +122,64 @@ const LoginScreen = () => {
               <View style={styles.orLine} />
             </View>
 
-            {/* Signup Button */}
-            <PaperButton
-              mode="outlined"
-              onPress={handleSignup}
-              style={styles.signupButton}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
             >
-              Sign up
-            </PaperButton>
+              <TouchableOpacity
+                onPress={() => console.log('Pressed')}
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  height: 52,
+                  borderWidth: 1,
+                  borderColor: 'gray',
+                  marginRight: 4,
+                  borderRadius: 10,
+                }}
+              >
+                <Image
+                  source={require('../../assets/facebook.png')}
+                  style={{
+                    height: 36,
+                    width: 36,
+                    marginRight: 8,
+                  }}
+                  resizeMode="contain"
+                />
+                <Text>Facebook</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                // onPress={handleGoogleSignIn}
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                  height: 52,
+                  borderWidth: 1,
+                  borderColor: 'gray',
+                  marginRight: 4,
+                  borderRadius: 10,
+                }}
+              >
+                <Image
+                  source={require('../../assets/google.png')}
+                  style={{
+                    height: 36,
+                    width: 36,
+                    marginRight: 8,
+                  }}
+                  resizeMode="contain"
+                />
+                <Text>Google</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -150,6 +221,7 @@ const LoginScreen = () => {
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
