@@ -10,6 +10,8 @@ const MobileLoginScreen = () => {
   const [isOtpModalVisible, setIsOtpModalVisible] = useState(false);
   const [otp, setOtp] = useState('');
 
+  //learning for otp 
+
   const handleSendOtp = () => {
     // Handle sending OTP logic here
     console.log('Sending OTP to:', phoneNumber);
