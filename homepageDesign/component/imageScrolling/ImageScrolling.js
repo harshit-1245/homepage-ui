@@ -7,9 +7,9 @@ import SliderBoxScrollView from './SliderBoxScrollView';
 const ImageScrolling = ({ style }) => {
   // Images for the slider
   const images = [
-    "https://img.etimg.com/thumb/msid-93051525,width-1070,height-580,imgsize-2243475,overlay-economictimes/photo.jpg",
-    "https://images-eu.ssl-images-amazon.com/images/G/31/img22/Wireless/devjyoti/PD23/Launches/Updated_ingress1242x550_3.gif",
-    "https://images-eu.ssl-images-amazon.com/images/G/31/img23/Books/BB/JULY/1242x550_Header-BB-Jul23.jpg",
+    "https://www.thestiffcollar.com/cdn/shop/files/stiffcollar_linen_kurta_collar_shirts.webp?v=1706101057",
+    "https://images.squarespace-cdn.com/content/v1/55473fe6e4b079a47a7498d1/1593168684754-MZNSMB0IP4MG2M93EASE/Way4_merchant_acquiring_Peak-sales-2-2.gif",
+    "https://static01.nyt.com/images/2019/07/24/business/24techfix/24techfix-articleLarge.gif?quality=75&auto=webp&disable=upscale",
   ];
 
   return (

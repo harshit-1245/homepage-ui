@@ -22,8 +22,8 @@ const TopContainer = () => {
     <View style={styles.banner}>
       <View style={styles.horizontalBanner}>
         <Pressable style={styles.flipkart}>
-          <Image style={styles.fkLogoImage} source={require('../../assets/lelekart-assests.png')} />
-          <Text style={styles.flipkartName}>lelekart</Text>
+          <Image style={styles.fkLogoImage} source={require('../../assets/google.png')} />
+          <Text style={styles.flipkartName}>Harry</Text>
         </Pressable>
 
         <Pressable onPress={testingFunction} style={login ? styles.LoginContainer : styles.Groceryflipkart}>

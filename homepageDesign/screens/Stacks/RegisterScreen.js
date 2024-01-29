@@ -69,10 +69,9 @@ const RegisterScreen = () => {
         }
       );
   
-      if(response.status === 200){
-        await AsyncStorage.setItem('userToken', response.data.data.authToken);
-        navigation.navigate("Main")
-      }
+        await AsyncStorage.setItem('authToken', response.data.data.authToken);
+      navigation.navigate("Main")
+      
     } catch (error) {
       console.error('API error:', error);
   
