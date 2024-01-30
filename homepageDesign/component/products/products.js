@@ -1,24 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import useProductStore from '../../src/store/productStore';
 
 const Products = () => {
-  const [products, setProducts] = useState([]);
+  const { products, fetchProducts, loading } = useProductStore();
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10); // Set the number of products per page
+
+  const loadProducts = useCallback(() => {
+    fetchProducts(page, pageSize);
+    setPage((prevPage) => prevPage + 1);
+  }, [fetchProducts, page, pageSize]);
+
+  const loadCachedProducts = useCallback(async () => {
+    // You may add caching logic here if needed
+    // Since Zustand already provides a local state, AsyncStorage-like caching may not be necessary
+    loadProducts();
+  }, [loadProducts]);
 
   useEffect(() => {
-    const getApi = async () => {
-      try {
-        const response = await axios.get('https://api.escuelajs.co/api/v1/products');
-        setProducts(response.data);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    getApi();
+    loadCachedProducts();
   }, []);
 
-  const renderProductItem = ({ item }) => (
+  const renderProductItem = useCallback(({ item }) => (
     <View style={styles.productItemContainer}>
       <Image source={{ uri: item.images[0] }} style={styles.productItemImage} />
       <View style={styles.productItemDetails}>
@@ -39,7 +43,13 @@ const Products = () => {
         </View>
       </View>
     </View>
-  );
+  ), []);
+
+  const renderFooter = useMemo(() => {
+    return loading ? (
+      <ActivityIndicator style={{ marginVertical: 20 }} size="large" color="#3498db" />
+    ) : null;
+  }, [loading]);
 
   return (
     <View style={styles.container}>
@@ -49,6 +59,9 @@ const Products = () => {
         renderItem={renderProductItem}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
+        onEndReached={loadProducts}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
       />
     </View>
   );
@@ -64,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    textAlign: 'center',
   },
   productItemContainer: {
     marginBottom: 16,
@@ -71,6 +85,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#f8f8f8',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   productItemImage: {
     width: 150,

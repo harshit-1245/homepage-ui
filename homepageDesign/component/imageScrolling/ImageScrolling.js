@@ -8,8 +8,8 @@ const ImageScrolling = ({ style }) => {
   // Images for the slider
   const images = [
     "https://www.thestiffcollar.com/cdn/shop/files/stiffcollar_linen_kurta_collar_shirts.webp?v=1706101057",
-    "https://images.squarespace-cdn.com/content/v1/55473fe6e4b079a47a7498d1/1593168684754-MZNSMB0IP4MG2M93EASE/Way4_merchant_acquiring_Peak-sales-2-2.gif",
-    "https://static01.nyt.com/images/2019/07/24/business/24techfix/24techfix-articleLarge.gif?quality=75&auto=webp&disable=upscale",
+    "https://www.digitaltrends.com/wp-content/uploads/2023/09/The-Batman-TV.jpg?resize=1200%2C630&p=1",
+    "https://images4.alphacoders.com/112/1121892.jpg",
   ];
 
   return (
