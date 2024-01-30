@@ -8,6 +8,8 @@ import ImageScrolling from '../../component/imageScrolling/ImageScrolling';
 import Category from '../../component/category-home/Category';
 import { useNavigation } from "@react-navigation/native";
 import Suggetion from '../../component/suggetionBox/suggetion';
+import CartItem from '../../component/cartItem/CartItem';
+import Products from '../../component/products/products';
 
 
 const HomeScreen = () => {
@@ -19,9 +21,13 @@ const HomeScreen = () => {
         
           <TopContainer />
           <ImageScrolling style={styles.customImageScrolling} />
-          <Category/>
+          <Category/> 
           {/* suggetion for you */}
           <Suggetion/>
+          {/* cart item in home page */}
+          <CartItem/>
+          {/* products */}
+          <Products/>
       
       </ScrollView>
     </>
