@@ -1,6 +1,15 @@
 const asyncHandler=require("express-async-handler")
 const bcrypt=require("bcrypt")
+require("dotenv").config()
 const User = require( "../models/userModel" )
+const accountSid=process.env.TWILIO_ACC_SID;
+const authToken=process.env.TWILIO_AUTH;
+const verifySid=process.env.VERIFY_SID;
+
+const client=require("twilio")(accountSid,authToken)
+
+
+
 
 const { ApiResponse } = require( "../utils/ApiResponse" )
 const { validateRegistration, validateLogin } = require( "../configuration/validation" )
@@ -99,5 +108,31 @@ const logoutUser = asyncHandler(async (req, res) => {
     res.status(500).json({ message: 'Something went wrong during logout' });
   }
 });
+//verify with otp
+const verifyWithOtp=asyncHandler(async(req,res)=>{
+  try {
+   const {phoneNumber}=req.body;
 
-module.exports={getUser,register,loginUser,logoutUser}
+    client.verify.v2
+    .services(verifySid)
+    .verifications.create({ to: phoneNumber, channel: "sms" })
+    .then((verification) => console.log(verification.status))
+    .then(() => {
+      const readline = require("readline").createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
+      readline.question("Please enter the OTP:", (otpCode) => {
+        client.verify.v2
+          .services(verifySid)
+          .verificationChecks.create({ to: phoneNumber, code: otpCode })
+          .then((verification_check) => console.log(verification_check.status))
+          .then(() => readline.close());
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong during generating OTP" });
+  }
+})
+
+module.exports={getUser,register,loginUser,logoutUser,verifyWithOtp}

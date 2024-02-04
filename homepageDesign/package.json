@@ -51,6 +51,7 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-voice": "^0.3.0",
     "react-query": "^3.39.3",
+    "textflow.js": "^0.1.4",
     "zod": "^3.22.4",
     "zustand": "^4.5.0"
   },
