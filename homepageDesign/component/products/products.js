@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { FlatList, StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { VirtualizedList, StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import useProductStore from '../../src/store/productStore';
 
 const Products = () => {
@@ -22,28 +22,34 @@ const Products = () => {
     loadCachedProducts();
   }, []);
 
-  const renderProductItem = useCallback(({ item }) => (
-    <View style={styles.productItemContainer}>
-      <Image source={{ uri: item.images[0] }} style={styles.productItemImage} />
-      <View style={styles.productItemDetails}>
-        <Text style={styles.productItemTitle}>{item.title}</Text>
-        <Text style={styles.productItemPrice}>${item.price}</Text>
-        <Text style={styles.productItemDescription} numberOfLines={3}>
-          {item.description}
-        </Text>
+  const renderProductItem = useCallback(({ index }) => {
+    const item = products[index];
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.buyNowButton]}>
-            <Text style={styles.buttonText}>Buy Now</Text>
-          </TouchableOpacity>
+    return (
+      <View style={styles.productItemContainer}>
+        <Image source={{ uri: item.images[0] }} style={styles.productItemImage} />
+        <View style={styles.productItemDetails}>
+          <Text style={styles.productItemTitle}>{item.title}</Text>
+          <Text style={styles.productItemPrice}>${item.price}</Text>
+          <Text style={styles.productItemDescription} numberOfLines={3}>
+            {item.description}
+          </Text>
 
-          <TouchableOpacity style={[styles.button, styles.addToCartButton]}>
-            <Text style={styles.buttonText}>Add to Cart</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={[styles.button, styles.buyNowButton]}>
+              <Text style={styles.buttonText}>Buy Now</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.button, styles.addToCartButton]}>
+              <Text style={styles.buttonText}>Add to Cart</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
-  ), []);
+    );
+  }, [products]);
+
+  const getItemCount = () => products.length;
 
   const renderFooter = useMemo(() => {
     return loading ? (
@@ -54,10 +60,12 @@ const Products = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Products</Text>
-      <FlatList
+      <VirtualizedList
         data={products}
         renderItem={renderProductItem}
         keyExtractor={(item) => item.id.toString()}
+        getItemCount={getItemCount}
+        getItem={(data, index) => data[index]}
         showsVerticalScrollIndicator={false}
         onEndReached={loadProducts}
         onEndReachedThreshold={0.5}

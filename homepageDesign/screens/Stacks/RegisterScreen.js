@@ -186,7 +186,7 @@ const RegisterScreen = () => {
                       paddingLeft: 22,
                     }}
                   >
-                    <Text
+                    <TextInput
                       style={{
                         width: '16%',
                         borderRightWidth: 1,
@@ -196,9 +196,9 @@ const RegisterScreen = () => {
                         paddingTop: 15,
                         fontSize: 17,
                       }}
-                    >
+                    />
                       +91
-                    </Text>
+                    
 
                     <TextInput
                       placeholder="Enter your phone number"

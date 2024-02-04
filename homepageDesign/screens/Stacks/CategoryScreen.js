@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { Image, FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { list } from '../../json/list';
@@ -8,9 +8,9 @@ const CategoryScreen = () => {
   const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState('Electronics');
 
-  const handleCategoryPress = (category) => {
+  const handleCategoryPress = useCallback((category) => {
     setSelectedCategory(category);
-  };
+  }, []);
 
   const productData = [
     { id: 1, title: 'Title 1' },
@@ -35,15 +35,37 @@ const CategoryScreen = () => {
     return Array.from({ length: Math.ceil(array.length / chunkSize) }, (_, index) => array.slice(index * chunkSize, (index + 1) * chunkSize));
   };
 
-  const productRows = chunkArray(productData, 3);
+  const productRows = chunkArray(productData, 2);
 
-  const navigationHandler = () => {
+  const navigationHandler = useCallback(() => {
     navigation.navigate("Search");
-  };
+  }, [navigation]);
 
-  const handleProductPress = (productId) => {
+  const handleProductPress = useCallback((productId) => {
     console.log(`Product with ID ${productId} pressed`);
-  };
+  }, []);
+
+  const renderCategoryItem = useCallback(({ item }) => (
+    <TouchableOpacity
+      style={[styles.categoryItem, { backgroundColor: selectedCategory === item.name ? '#FFD700' : '#FFFFFF' }]}
+      onPress={() => handleCategoryPress(item.name)}
+    >
+      <Image style={styles.categoryImage} source={{ uri: item.image }} />
+      <Text style={styles.categoryText}>{item.name}</Text>
+    </TouchableOpacity>
+  ), [handleCategoryPress, selectedCategory]);
+
+  const renderProductItem = useCallback(({ item }) => (
+    <TouchableOpacity
+      style={styles.productItem}
+      onPress={() => handleProductPress(item.id)}
+    >
+      <View style={styles.productContainer}>
+        <Image source={require("../../assets/lelekart-assests.png")} style={styles.productImage} />
+        <Text style={styles.productTitle}>{item.title}</Text>
+      </View>
+    </TouchableOpacity>
+  ), [handleProductPress]);
 
   return (
     <View style={styles.container}>
@@ -58,47 +80,34 @@ const CategoryScreen = () => {
       </TouchableOpacity>
 
       <View style={styles.contentContainer}>
-        <ScrollView style={styles.safeArea1}>
-          <View style={styles.logoContainer}>
-            <Image source={require('../../assets/lelekart-assests.png')} style={styles.logoImage} />
-            <Text style={styles.text}>For You</Text>
-          </View>
-          <ScrollView style={styles.categoryContainer} nestedScrollEnabled={false}>
-            {list.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.categoryItem}
-                onPress={() => handleCategoryPress(item.name)}
-              >
-                <Image style={styles.categoryImage} source={{ uri: item.image }} />
-                <Text style={styles.categoryText}>{item.name}</Text>
-              </TouchableOpacity>
-            ))}
-            <View style={styles.dividerLine} />
-          </ScrollView>
-        </ScrollView>
+        <FlatList
+          data={list}
+          renderItem={renderCategoryItem}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoryList}
+        />
 
-        <ScrollView style={styles.safeArea2} nestedScrollEnabled={false}>
-          {productRows.map((row, rowIndex) => (
-            <View key={rowIndex} style={styles.makingFit}>
-              {row.map((product) => (
-                <TouchableOpacity
-                  key={product.id}
-                  onPress={() => handleProductPress(product.id)}
-                >
-                  <View style={styles.relatedProductContainer}>
-                    <Image source={require("../../assets/lelekart-assests.png")} style={styles.relatedProductImage} />
-                    <Text style={styles.relatedProductTitle}>{product.title}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          ))}
-        </ScrollView>
+        <FlatList
+          data={productRows}
+          renderItem={({ item }) => (
+            <FlatList
+              data={item}
+              renderItem={renderProductItem}
+              keyExtractor={(product) => product.id.toString()}
+              numColumns={2}
+              style={styles.productList}
+            />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
     </View>
   );
 };
+
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -106,12 +115,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 10,
     paddingTop: 20,
-    marginBottom:100,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#F5F5F5',
   },
   searchBar: {
     flexDirection: 'row',
-    backgroundColor: '#e0e0e0',
+    backgroundColor: 'white',
     borderRadius: 25,
     alignItems: 'center',
     paddingHorizontal: 15,
@@ -136,68 +144,22 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   contentContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  categoryImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    marginBottom: 5,
-    alignSelf: 'center',
-    marginTop: 10,
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  logoImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 50,
-  },
-  safeArea1: {
     flex: 1,
-    maxWidth: 80, // Adjust the maximum width
-    paddingHorizontal: 10,
-    paddingTop: 0,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 15,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    height: 580,
-  },
-  safeArea2: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
     padding: 10,
+  },
+  categoryList: {
+    maxHeight: 60,
     marginBottom: 20,
-    
-  },
-  
-  
-  makingFit: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-  },
-  text: {
-    fontSize: 16,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    marginTop: 10,
   },
   categoryItem: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
-    padding: 10,
-    borderRadius: 10,
-    backgroundColor: '#fff',
+    marginRight: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+    borderWidth: 1,
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -205,39 +167,47 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   categoryImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 30,
+    height: 30,
     marginBottom: 10,
+    alignSelf: 'center',
   },
   categoryText: {
-    marginTop: 5,
-    fontSize: 10,
+    fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  relatedProductContainer: {
-    padding:10,
-    marginBottom:10,
-    height:"auto"
+  productItem: {
+    flex: 1,
+    margin: 10,
+    borderRadius: 15,
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+   
   },
-  relatedProductImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 40,
-    marginBottom: 2,  // Adjust the marginBottom to reduce space
+  productList: {
+    flexGrow: 0,
   },
-  relatedProductTitle: {
-    fontSize: 10,
-    // fontWeight: 'bold',
-    marginBottom: 1,
-    color: '#333',
-    textAlign: 'center', // Add this line
+  productContainer: {
+    padding: 15,
+    borderRadius: 15,
+    backgroundColor: '#FFFFFF',
   },
-  dividerLine: {
-    height: 1,
-    backgroundColor: 'rgba(0,0,0,0.1)',
+  productImage: {
+    width: '100%',
+    height: 120,
+    borderRadius: 8,
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  productTitle: {
     marginTop: 10,
+    fontSize: 14,
+    textAlign: 'center',
   },
 });
 
