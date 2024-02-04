@@ -2,11 +2,10 @@ const asyncHandler=require("express-async-handler")
 const bcrypt=require("bcrypt")
 require("dotenv").config()
 const User = require( "../models/userModel" )
-const accountSid=process.env.TWILIO_ACC_SID;
-const authToken=process.env.TWILIO_AUTH;
-const verifySid=process.env.VERIFY_SID;
-
-const client=require("twilio")(accountSid,authToken)
+const accountSid = "ACb0461241955cb3bf6d51938646269301";
+const authToken = "e751897fda01f8ca9659c3ae54420331";
+const verifySid = "VA43563e2bd5d9838fd44912f1947f3d5d";
+const client = require("twilio")(accountSid, authToken);
 
 
 
@@ -113,23 +112,23 @@ const verifyWithOtp=asyncHandler(async(req,res)=>{
   try {
    const {phoneNumber}=req.body;
 
-    client.verify.v2
-    .services(verifySid)
-    .verifications.create({ to: phoneNumber, channel: "sms" })
-    .then((verification) => console.log(verification.status))
-    .then(() => {
-      const readline = require("readline").createInterface({
-        input: process.stdin,
-        output: process.stdout,
-      });
-      readline.question("Please enter the OTP:", (otpCode) => {
-        client.verify.v2
-          .services(verifySid)
-          .verificationChecks.create({ to: phoneNumber, code: otpCode })
-          .then((verification_check) => console.log(verification_check.status))
-          .then(() => readline.close());
-      });
+   client.verify.v2
+  .services(verifySid)
+  .verifications.create({ to: "+919670236718", channel: "sms" })
+  .then((verification) => console.log(verification.status))
+  .then(() => {
+    const readline = require("readline").createInterface({
+      input: process.stdin,
+      output: process.stdout,
     });
+    readline.question("Please enter the OTP:", (otpCode) => {
+      client.verify.v2
+        .services(verifySid)
+        .verificationChecks.create({ to: "+919670236718", code: otpCode })
+        .then((verification_check) => console.log(verification_check.status))
+        .then(() => readline.close());
+    });
+  });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong during generating OTP" });
   }
