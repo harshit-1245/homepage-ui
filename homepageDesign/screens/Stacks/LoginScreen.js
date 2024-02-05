@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Modal, Pressable, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button as PaperButton, TextInput as PaperTextInput } from 'react-native-paper';
@@ -6,12 +6,14 @@ import { useNavigation } from '@react-navigation/native';
 import useAuthStore from '../../src/store/loginAuthStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios"
+import { UserType } from '../../context/contextApi';
 
 const LoginScreen = () => {
   const { isPasswordShown, isEmailModalVisible, isForgotPasswordModalVisible, forgotPasswordEmail, setField, togglePasswordVisibility, setIsEmailModalVisible, setIsForgotPasswordModalVisible, setForgotPasswordEmail } = useAuthStore();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+ 
 
   const handleEmailLogin = async () => {
     try {
@@ -30,7 +32,7 @@ const LoginScreen = () => {
 // If the login was successful, you might want to navigate to another screen or perform additional actions.
 if(response.status === 200){
   await AsyncStorage.setItem('authToken', response.data.data.authToken);
-
+   
   navigation.navigate("Main")
 }
     } catch (error) {

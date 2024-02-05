@@ -7,15 +7,17 @@ import { StyleSheet, Text, View } from 'react-native';
 
 
 import AppNaviagtion from './navigation/index';
+import UserContext from './context/contextApi';
 
 
 
 export default function App() {
   return (
     <>
-     {/* <NavigationContainer> */}
+     <UserContext>
   <AppNaviagtion/>
-  {/* </NavigationContainer> */}
+  </UserContext>
+  
     </>
   );
 }

@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { VirtualizedList, StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import useProductStore from '../../src/store/productStore';
 
 const Products = () => {
   const { products, fetchProducts, loading } = useProductStore();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10); // Set the number of products per page
+  const [pageSize, setPageSize] = useState(10);
 
   const loadProducts = useCallback(() => {
     fetchProducts(page, pageSize);
@@ -13,8 +13,6 @@ const Products = () => {
   }, [fetchProducts, page, pageSize]);
 
   const loadCachedProducts = useCallback(async () => {
-    // You may add caching logic here if needed
-    // Since Zustand already provides a local state, AsyncStorage-like caching may not be necessary
     loadProducts();
   }, [loadProducts]);
 
@@ -22,56 +20,46 @@ const Products = () => {
     loadCachedProducts();
   }, []);
 
-  const renderProductItem = useCallback(({ index }) => {
-    const item = products[index];
+  const renderProductItem = ({ item }) => (
+    <View style={styles.productItemContainer}>
+      <Image source={{ uri: item.images[0] }} style={styles.productItemImage} />
+      <View style={styles.productItemDetails}>
+        <Text style={styles.productItemTitle}>{item.title}</Text>
+        <Text style={styles.productItemPrice}>${item.price}</Text>
+        <Text style={styles.productItemDescription} numberOfLines={3}>
+          {item.description}
+        </Text>
 
-    return (
-      <View style={styles.productItemContainer}>
-        <Image source={{ uri: item.images[0] }} style={styles.productItemImage} />
-        <View style={styles.productItemDetails}>
-          <Text style={styles.productItemTitle}>{item.title}</Text>
-          <Text style={styles.productItemPrice}>${item.price}</Text>
-          <Text style={styles.productItemDescription} numberOfLines={3}>
-            {item.description}
-          </Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={[styles.button, styles.buyNowButton]}>
+            <Text style={styles.buttonText}>Buy Now</Text>
+          </TouchableOpacity>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={[styles.button, styles.buyNowButton]}>
-              <Text style={styles.buttonText}>Buy Now</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={[styles.button, styles.addToCartButton]}>
-              <Text style={styles.buttonText}>Add to Cart</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={[styles.button, styles.addToCartButton]}>
+            <Text style={styles.buttonText}>Add to Cart</Text>
+          </TouchableOpacity>
         </View>
       </View>
-    );
-  }, [products]);
+    </View>
+  );
 
-  const getItemCount = () => products.length;
+  const keyExtractor = (item) => item.id.toString();
 
-  const renderFooter = useMemo(() => {
-    return loading ? (
-      <ActivityIndicator style={{ marginVertical: 20 }} size="large" color="#3498db" />
-    ) : null;
-  }, [loading]);
+  const renderFooter = () => (
+    loading ? <ActivityIndicator style={{ marginVertical: 20 }} size="large" color="#3498db" /> : null
+  );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>Products</Text>
-      <VirtualizedList
-        data={products}
-        renderItem={renderProductItem}
-        keyExtractor={(item) => item.id.toString()}
-        getItemCount={getItemCount}
-        getItem={(data, index) => data[index]}
-        showsVerticalScrollIndicator={false}
-        onEndReached={loadProducts}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={renderFooter}
-      />
-    </View>
+    <FlatList
+      style={styles.container}
+      data={products}
+      renderItem={renderProductItem}
+      keyExtractor={keyExtractor}
+      onEndReached={loadProducts}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={renderFooter}
+      ListHeaderComponent={<Text style={styles.headerText}>Products</Text>}
+    />
   );
 };
 
