@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Text, Image, Dimensions, Pressable, TextInput, TouchableOpacity} from "react-native";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import {useNavigation} from "@react-navigation/native"
+import { UserType } from "../../context/contextApi";
 
 //use one icon library
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
 const TopContainer = () => {
+  const {userId}=useContext(UserType)
   const navigation=useNavigation()
  const [login,setLogin]=useState(false)
- const testingFunction=()=>{
-    setLogin(!login)
-  }
+
+
   return (
     <View style={styles.topContainer}>
   <View style={styles.container}>
@@ -26,13 +27,19 @@ const TopContainer = () => {
           <Text style={styles.flipkartName}>Harry</Text>
         </Pressable>
 
-        <Pressable onPress={testingFunction} style={login ? styles.LoginContainer : styles.Groceryflipkart}>
-          {login ? <Text style={styles.Login}>Login</Text> : (
+        <Pressable  style={login ? styles.LoginContainer : styles.Groceryflipkart}>
+          {userId?(
             <>
-              <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} />
+            <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} />
               <Text style={styles.groceryName}>Grocery</Text>
             </>
+          ):(
+            <Pressable>
+              <Text>Logout</Text>
+            </Pressable>
           )}
+              
+           
         </Pressable>
       </View>
     </View>
