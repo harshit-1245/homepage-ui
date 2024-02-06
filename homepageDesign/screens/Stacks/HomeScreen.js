@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, ViewPropTypes } from 'react-native';
+import { Alert, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, ViewPropTypes } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import { useNavigation } from "@react-navigation/native";
 import { UserType } from '../../context/contextApi';
@@ -11,15 +11,31 @@ import Suggetion from '../../component/suggetionBox/suggetion';
 import CartItem from '../../component/cartItem/CartItem';
 import Products from '../../component/products/products';
 
+
 const HomeScreen = () => {
-  
-  
+  const {userId,setUserId,setAuthenticated}=useContext(UserType)
+   const navigation = useNavigation();
 
-  const navigation = useNavigation();
-
+    const handleLogout=async()=>{
+      try {
+        // Remove the token from AsyncStorage
+        await AsyncStorage.removeItem("authToken");
+        // Clear userId in the context
+        setUserId('');
+        // navigation.navigate("Login")
+     setAuthenticated(false)
+      } catch (error) {
+        Alert.alert("Login for better Experience")
+      }
+    }
+   console.log(userId)
   return (
     <>
       <SafeAreaView></SafeAreaView>
+        <Pressable onPress={handleLogout} style={{marginTop:50}}>
+        <Text>Logout</Text>
+      </Pressable>
+     
       
       <ScrollView style={{ marginTop: 30 }}>
         <TopContainer />

@@ -1,4 +1,3 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React, { createContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import base64 from 'base-64';
@@ -7,7 +6,7 @@ export const UserType = createContext();
 
 const UserContext = ({ children }) => {
   const [userId, setUserId] = useState('');
- 
+  const [authenticated, setAuthenticated] = useState(false); // New state to track authentication
 
   const decodeJwtToken = async () => {
     try {
@@ -24,7 +23,10 @@ const UserContext = ({ children }) => {
         // Access the decoded token's payload.userId
         const userId = decodedToken.payload._id;
         setUserId(userId);
+        setAuthenticated(true); // Set authenticated to true if token is present
       } else {
+          setUserId("")
+        setAuthenticated(false); // Set authenticated to false if token is not present
         console.error('Token not found in AsyncStorage');
       }
     } catch (error) {
@@ -36,15 +38,14 @@ const UserContext = ({ children }) => {
   useEffect(() => {
     decodeJwtToken();
   }, []);
- 
+
+  console.log(userId)
 
   return (
-    <UserType.Provider value={{ userId, setUserId }}>
+    <UserType.Provider value={{ userId, setUserId, authenticated,setAuthenticated}}>
       {children}
     </UserType.Provider>
   );
 };
 
 export default UserContext;
-
-const styles = StyleSheet.create({});

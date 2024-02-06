@@ -7,73 +7,61 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useNavigation} from "@react-navigation/native"
 import { UserType } from "../../context/contextApi";
 
-//use one icon library
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
 const TopContainer = () => {
-  const {userId}=useContext(UserType)
-  const navigation=useNavigation()
- const [login,setLogin]=useState(false)
-
-
+  const { authenticated } = useContext(UserType);
+  const navigation = useNavigation();
+  
   return (
     <View style={styles.topContainer}>
-  <View style={styles.container}>
-    <View style={styles.banner}>
-      <View style={styles.horizontalBanner}>
-        <Pressable style={styles.flipkart}>
-          <Image style={styles.fkLogoImage} source={require('../../assets/google.png')} />
-          <Text style={styles.flipkartName}>Harry</Text>
-        </Pressable>
-
-        <Pressable  style={login ? styles.LoginContainer : styles.Groceryflipkart}>
-          {userId?(
-            <>
-            <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} />
-              <Text style={styles.groceryName}>Grocery</Text>
-            </>
-          ):(
-            <Pressable>
-              <Text>Logout</Text>
+      <View style={styles.container}>
+        <View style={styles.banner}>
+          <View style={styles.horizontalBanner}>
+            <Pressable style={styles.flipkart}>
+              <Image style={styles.fkLogoImage} source={require('../../assets/google.png')} />
+              <Text style={styles.flipkartName}>Harry</Text>
             </Pressable>
-          )}
-              
-           
-        </Pressable>
-      </View>
-    </View>
 
-    <View style={styles.searchBar}>
-      <View style={styles.horizontalBanner}>
-        <View style={styles.brandMail}>
-          <Text style={styles.brandMailText}>Brand Mail</Text>
-          <Text style={styles.brandMailTextOff}>⚪ OFF</Text>
+            {authenticated && (
+              <Pressable style={styles.Groceryflipkart}>
+                <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} />
+                <Text style={styles.groceryName}>Grocery</Text>
+              </Pressable>
+            )}
+          </View>
         </View>
 
-        <Pressable onPress={() => navigation.navigate("Search")} style={styles.textInput}>
-          <Text style={styles.searchIcon}>
-            <FontAwesome name="search" style={{ fontSize: RFPercentage(4), fontWeight: '500' }} />
-          </Text>
+        <View style={styles.searchBar}>
+          <View style={styles.horizontalBanner}>
+            <View style={styles.brandMail}>
+              <Text style={styles.brandMailText}>Brand Mail</Text>
+              <Text style={styles.brandMailTextOff}>⚪ OFF</Text>
+            </View>
 
-          <View style={styles.textInputBox} />
-          <Text style={styles.searchText}>Search for products</Text>
+            <Pressable onPress={() => navigation.navigate("Search")} style={styles.textInput}>
+              <Text style={styles.searchIcon}>
+                <FontAwesome name="search" style={{ fontSize: RFPercentage(4), fontWeight: '500' }} />
+              </Text>
 
-          <Text style={styles.cameraIcon}>
-            <AntDesign name="camera" style={{ fontSize: RFPercentage(4), fontWeight: '600' }} />
-          </Text>
+              <View style={styles.textInputBox} />
+              <Text style={styles.searchText}>Search for products</Text>
 
-          <Text style={styles.micIcon}>
-            <MaterialCommunityIcons name="microphone-outline" style={{ fontSize: RFPercentage(4) }} />
-          </Text>
-        </Pressable>
+              <Text style={styles.cameraIcon}>
+                <AntDesign name="camera" style={{ fontSize: RFPercentage(4), fontWeight: '600' }} />
+              </Text>
+
+              <Text style={styles.micIcon}>
+                <MaterialCommunityIcons name="microphone-outline" style={{ fontSize: RFPercentage(4) }} />
+              </Text>
+            </Pressable>
+          </View>
+        </View>
       </View>
     </View>
-  </View>
-</View>
-
-  )
-}
+  );
+};
 
 export default TopContainer
 

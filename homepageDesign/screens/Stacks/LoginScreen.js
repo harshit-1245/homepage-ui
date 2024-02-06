@@ -10,6 +10,7 @@ import { UserType } from '../../context/contextApi';
 
 const LoginScreen = () => {
   const { isPasswordShown, isEmailModalVisible, isForgotPasswordModalVisible, forgotPasswordEmail, setField, togglePasswordVisibility, setIsEmailModalVisible, setIsForgotPasswordModalVisible, setForgotPasswordEmail } = useAuthStore();
+  const {setAuthenticated}=useContext(UserType)
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,15 +30,17 @@ const LoginScreen = () => {
           },
         }
       );
-// If the login was successful, you might want to navigate to another screen or perform additional actions.
-if(response.status === 200){
-  await AsyncStorage.setItem('authToken', response.data.data.authToken);
-   
-  navigation.navigate("Main")
-}
+      
+      // If the login was successful, update authenticated state and navigate to Main screen
+      if (response.status === 200) {
+        await AsyncStorage.setItem('authToken', response.data.data.authToken);
+       
+        navigation.navigate('Main');
+        setAuthenticated(true); // Set authenticated to true
+       
+      }
     } catch (error) {
-      console.error('API error:', error.response.data);
-
+      console.error('API error:', error.response.data.data);
       // Handle the error, display an error message, or perform other actions.
     }
   };
