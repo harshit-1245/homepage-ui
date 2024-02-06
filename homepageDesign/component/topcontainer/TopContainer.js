@@ -26,8 +26,8 @@ const TopContainer = () => {
 
             {authenticated && (
               <Pressable style={styles.Groceryflipkart}>
-                <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} />
-                <Text style={styles.groceryName}>Grocery</Text>
+                {/* <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} /> */}
+                <Text style={styles.groceryName}>Wait...</Text>
               </Pressable>
             )}
           </View>

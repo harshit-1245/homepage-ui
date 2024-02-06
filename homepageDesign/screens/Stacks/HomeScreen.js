@@ -16,27 +16,12 @@ const HomeScreen = () => {
   const {userId,setUserId,setAuthenticated}=useContext(UserType)
    const navigation = useNavigation();
 
-    const handleLogout=async()=>{
-      try {
-        // Remove the token from AsyncStorage
-        await AsyncStorage.removeItem("authToken");
-        // Clear userId in the context
-        setUserId('');
-        // navigation.navigate("Login")
-     setAuthenticated(false)
-      } catch (error) {
-        Alert.alert("Login for better Experience")
-      }
-    }
-   console.log(userId)
+   
+   
   return (
     <>
-      <SafeAreaView></SafeAreaView>
-        <Pressable onPress={handleLogout} style={{marginTop:50}}>
-        <Text>Logout</Text>
-      </Pressable>
      
-      
+     
       <ScrollView style={{ marginTop: 30 }}>
         <TopContainer />
         <ImageScrolling style={styles.customImageScrolling} />
