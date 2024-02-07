@@ -1,15 +1,13 @@
 const asyncHandler=require("express-async-handler")
 const bcrypt=require("bcrypt")
 require("dotenv").config()
+const randomstring = require('randomstring');
 const User = require( "../models/userModel" )
 const { ApiResponse } = require( "../utils/ApiResponse" )
 const { validateRegistration, validateLogin } = require( "../configuration/validation" )
 
-const accountSid = "ACb0461241955cb3bf6d51938646269301";
-const authToken = "8a3b092325246016ab12fb3ef47fae62";
-const verifySid = "VA43563e2bd5d9838fd44912f1947f3d5d";
-const client = require("twilio")(accountSid, authToken);
-
+//store otp in database
+const otpDatabase = {};
 
 const getUser=asyncHandler(async(req,res)=>{
     try {
@@ -104,31 +102,34 @@ const logoutUser = asyncHandler(async (req, res) => {
   }
 });
 //verify with otp
-const verifyWithOtp=asyncHandler(async(req,res)=>{
-  try {
-   const {phoneNumber}=req.body;
+const generateOTP = asyncHandler(async (req, res) => {
+  const { phoneNumber } = req.body;
 
-   client.verify.v2
-   .services(verifySid)
-   .verifications.create({ to: phoneNumber, channel: "sms" })
-   .then((verification) => console.log(verification.status))
-   .then(() => {
-     const readline = require("readline").createInterface({
-       input: process.stdin,
-       output: process.stdout,
-     });
-     readline.question("Please enter the OTP:", (otpCode) => {
-       client.verify.v2
-         .services(verifySid)
-         .verificationChecks.create({ to: phoneNumber, code: otpCode })
-         .then((verification_check) => console.log(verification_check.status))
-         .then(() => readline.close());
-     });
-   });
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: "Something went wrong during generating OTP" });
+  if (!phoneNumber) {
+    return res.status(400).json({ error: 'Phone number is required' });
+  }
+
+  // Generate a random 6-digit OTP
+  const otp = randomstring.generate({
+    length: 6,
+    charset: 'numeric'
+  });
+ // Store the OTP in the database
+ otpDatabase[phoneNumber] = otp;
+  res.status(200).json({ otp });
+});
+
+const verifyOTP=asyncHandler(async(req,res)=>{
+  const { phoneNumber, otp } = req.body;
+
+  // Check if OTP matches the one stored in the database
+  if (otp === otpDatabase[phoneNumber]) {
+    // If OTP is correct, delete it from the database
+    delete otpDatabase[phoneNumber];
+    res.status(200).json({ verified: true });
+  } else {
+    res.status(200).json({ verified: false });
   }
 })
 
-module.exports={getUser,register,loginUser,logoutUser,verifyWithOtp}
+module.exports={getUser,register,loginUser,logoutUser,generateOTP,verifyOTP}

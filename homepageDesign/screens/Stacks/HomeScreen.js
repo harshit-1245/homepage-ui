@@ -13,15 +13,10 @@ import Products from '../../component/products/products';
 
 
 const HomeScreen = () => {
-  const {userId,setUserId,setAuthenticated}=useContext(UserType)
-   const navigation = useNavigation();
 
-   
-   
+
   return (
     <>
-     
-     
       <ScrollView style={{ marginTop: 30 }}>
         <TopContainer />
         <ImageScrolling style={styles.customImageScrolling} />
