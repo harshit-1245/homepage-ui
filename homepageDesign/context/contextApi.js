@@ -8,7 +8,7 @@ const UserContext = ({ children }) => {
   
   const [userId, setUserId] = useState('');
   const [authenticated, setAuthenticated] = useState(false); // New state to track authentication
-  const [products,setProducts]=useState([])
+  const [products,setProducts]=useState({})
 
   const decodeJwtToken = async () => {
     try {

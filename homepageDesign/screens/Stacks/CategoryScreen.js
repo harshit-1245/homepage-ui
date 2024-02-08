@@ -4,6 +4,8 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { list } from '../../json/list';
 import { UserType } from '../../context/contextApi';
+import { productData } from '../../apis/products2Api';
+
 
 const CategoryScreen = () => {
   const {products}=useContext(UserType)
@@ -14,11 +16,7 @@ const CategoryScreen = () => {
     setSelectedCategory(category);
   }, []);
 
-  const productData = [
-    { id: 1, title: 'Title 1' },
-    { id: 2, title: 'Title 2' },
-   
-  ];
+ 
 
   const chunkArray = (array, chunkSize) => {
     return Array.from({ length: Math.ceil(array.length / chunkSize) }, (_, index) => array.slice(index * chunkSize, (index + 1) * chunkSize));
@@ -50,8 +48,8 @@ const CategoryScreen = () => {
       onPress={() => handleProductPress(item.id)}
     >
       <View style={styles.productContainer}>
-        <Image source={require("../../assets/lelekart-assests.png")} style={styles.productImage} />
-        <Text style={styles.productTitle}>{item.title}</Text>
+        <Image source={{uri:item.image}} style={styles.productImage} />
+        <Text numberOfLines={1} style={styles.productTitle}>{item.title}</Text>
       </View>
     </TouchableOpacity>
   ), [handleProductPress]);
