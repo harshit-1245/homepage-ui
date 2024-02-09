@@ -29,6 +29,24 @@ const userSchema=new mongoose.Schema({
       emailVerificationToken: {
         type: String,
       },
+      addresses: [
+        {
+          name: String,
+          mobileNo: String,
+          houseNo: String,
+          street: String,
+          landmark: String,
+          city: String,
+          country: String,
+          postalCode: String,
+        },
+      ],
+      orders: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Order",
+        },
+      ],
       tokens: [{
         token: {
           type: String,
