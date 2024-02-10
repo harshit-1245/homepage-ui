@@ -72,7 +72,6 @@ const CategoryScreen = () => {
           renderItem={renderCategoryItem}
           keyExtractor={(item) => item.id.toString()}
           horizontal
-          showsHorizontalScrollIndicator={false}
           style={styles.categoryList}
         />
 
@@ -84,6 +83,7 @@ const CategoryScreen = () => {
               renderItem={renderProductItem}
               keyExtractor={(product) => product.id.toString()}
               numColumns={2}
+              showsVerticalScrollIndicator={false}
               style={styles.productList}
             />
           )}

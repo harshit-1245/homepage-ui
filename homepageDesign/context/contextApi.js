@@ -53,8 +53,6 @@ const UserContext = ({ children }) => {
     fetchData()
   }, []);
 
-  
-
   return (
     <UserType.Provider value={{ userId, setUserId, authenticated,setAuthenticated,products}}>
       {children}

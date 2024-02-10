@@ -2,15 +2,38 @@ import React, { memo, useCallback, useContext } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { AntDesign, MaterialCommunityIcons, Feather, FontAwesome, SimpleLineIcons, Entypo, Ionicons, Octicons, EvilIcons,FontAwesome5,MaterialIcons } from '@expo/vector-icons';
 import { UserType } from '../../context/contextApi';
+import { useNavigation } from "@react-navigation/native";
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const AccountScreen = () => {
-  const {authenticated}=useContext(UserType);
+  const {authenticated,setAuthenticated,setUserId}=useContext(UserType);
+  const navigation=useNavigation();
+
+  const handleLogout=async()=>{
+     
+      try {
+        // Remove the token from AsyncStorage
+        await AsyncStorage.removeItem("authToken");
+        // Clear userId in the context
+        setUserId('');
+        // Set authenticated to false in the context
+        setAuthenticated(false);
+          
+          
+        } catch (error) {
+          console.error('Error retrieving authToken:', error);
+        }
+      }
+const handleLogIn=()=>{
+ navigation.navigate("Login")
+}
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
-        {authenticated ? (
-        
-          
+        {authenticated ? ( 
           <>
           <View style={styles.header}>
           <Text style={[styles.headerText, styles.boldText]}>+ Phone Number</Text>
@@ -31,7 +54,7 @@ const AccountScreen = () => {
             <Text style={styles.accountText1}>Account</Text>
           </View>
           <Text style={styles.verifyText1}>Log in for exclusive offers</Text>
-          <Pressable style={styles.verifyButton1}>
+          <Pressable style={styles.verifyButton1} onPress={handleLogIn}>
             <Text style={styles.verifyButtonText1}>Log In</Text>
           </Pressable>
         </View>
@@ -120,12 +143,12 @@ const AccountScreen = () => {
          {/* Logout button */}
          {authenticated ? (
           <View style={styles.logoutContainer}>
-          <Pressable style={styles.logoutButton}>
+          <Pressable style={styles.logoutButton} onPress={handleLogout}>
             <Text style={styles.logoutButtonText}>Logout</Text>
           </Pressable>
-        </View>
+          </View>
          ):(
-null
+      null
          )}
         
       </ScrollView>

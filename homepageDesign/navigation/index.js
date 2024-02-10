@@ -13,6 +13,7 @@ import SearchScreen from '../screens/Stacks/SearchScreen';
 import LoginScreen from '../screens/Stacks/LoginScreen';
 import RegisterScreen from '../screens/Stacks/RegisterScreen';
 import MobileLoginSceen from '../screens/Stacks/MobileLoginSceen';
+import ProductScreen from '../screens/Stacks/ProductScreen';
 
 const Stack = createNativeStackNavigator();
 const MaterialBottomTab = createMaterialBottomTabNavigator();
@@ -69,6 +70,7 @@ export default function AppNavigation() {
         <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
         <Stack.Screen name='Mobile' component={MobileLoginSceen} options={{ headerShown: false }} />
+        <Stack.Screen name='Product' component={ProductScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

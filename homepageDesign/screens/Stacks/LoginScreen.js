@@ -35,7 +35,7 @@ const LoginScreen = () => {
       if (response.status === 200) {
         await AsyncStorage.setItem('authToken', response.data.data.authToken);
        
-        navigation.navigate('Main');
+        navigation.navigate('Home');
         setAuthenticated(true); // Set authenticated to true
        
       }

@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import useProductStore from '../../src/store/productStore';
+import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
 
 const Products = () => {
+  const navigation = useNavigation(); // Initialize useNavigation hook
+
   const { products, fetchProducts, loading } = useProductStore();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -20,6 +23,9 @@ const Products = () => {
     loadCachedProducts();
   }, []);
 
+  
+
+
   const renderProductItem = ({ item }) => (
     <View style={styles.productItemContainer}>
       <Image source={{ uri: item.images[0] }} style={styles.productItemImage} />
@@ -31,7 +37,12 @@ const Products = () => {
         </Text>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.buyNowButton]}>
+          <TouchableOpacity
+            style={[styles.button, styles.buyNowButton]}
+            onPress={() => navigation.navigate("Product",{
+              productId:item.id,
+            })} // Pass productId to handleBuyNow function
+          >
             <Text style={styles.buttonText}>Buy Now</Text>
           </TouchableOpacity>
 

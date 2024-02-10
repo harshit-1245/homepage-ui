@@ -1,49 +1,57 @@
-import React, { useContext, useEffect } from 'react';
-import { Alert, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View, ViewPropTypes } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
-import { useNavigation } from "@react-navigation/native";
+import React, { useContext } from 'react';
+import { View, Text, ScrollView, StyleSheet, ViewPropTypes } from 'react-native';
 import { UserType } from '../../context/contextApi';
 import TopContainer from '../../component/topcontainer/TopContainer';
-import TrandingList from '../../component/trandingList/TrandingList';
 import ImageScrolling from '../../component/imageScrolling/ImageScrolling';
 import Category from '../../component/category-home/Category';
 import Suggetion from '../../component/suggetionBox/suggetion';
 import CartItem from '../../component/cartItem/CartItem';
 import Products from '../../component/products/products';
 
-
 const HomeScreen = () => {
-
+  const { authenticated } = useContext(UserType);
 
   return (
-    <>
-      <ScrollView style={{ marginTop: 30 }}>
-        <TopContainer />
-        <ImageScrolling style={styles.customImageScrolling} />
-        <Category />
-        {/* suggetion for you */}
-        <Suggetion />
-        {/* cart item in home page */}
+    <ScrollView style={{ marginTop: 35 }} showsVerticalScrollIndicator={false}>
+      <TopContainer />
+      <ImageScrolling style={styles.customImageScrolling} />
+      <Category />
+      <Suggetion />
+      {/* Conditional rendering of cart item based on authentication */}
+      {authenticated ? (
         <CartItem />
-        {/* products */}
-        <Products />
-      </ScrollView>
-    </>
+      ) : (
+        <View style={styles.loginPrompt}>
+          <Text style={styles.loginPromptText}>Please login to view your cart</Text>
+        </View>
+      )}
+      <Products />
+    </ScrollView>
   );
 };
+
 // Use ViewPropTypes for the style prop
 HomeScreen.propTypes = {
   style: ViewPropTypes.style,
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   customImageScrolling: {
     marginHorizontal: -18,
     marginBottom: 0,
+  },
+  loginPrompt: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  loginPromptText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#555',
+    paddingHorizontal: 20,
   },
 });
 
