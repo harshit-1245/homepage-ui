@@ -4,25 +4,47 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { list } from '../../json/list';
 import { UserType } from '../../context/contextApi';
-import { productData } from '../../apis/products2Api';
-
+import { productData } from '../../apis/productApi';
 
 const CategoryScreen = () => {
-  const {products}=useContext(UserType)
+  
   const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState('Electronics');
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const handleCategoryPress = useCallback((category) => {
     setSelectedCategory(category);
+    // Filter products based on the selected category
+    const filteredProducts = productData.filter(product => product.category && product.category.name === category);
+    setFilteredProducts(filteredProducts);
   }, []);
-
- 
+  
+  function getCategories(productData) {
+    const categoriesMap = new Map(); // Using a Map to ensure uniqueness and preserve insertion order
+    
+    // Iterate over each product
+    productData.forEach(product => {
+      // Check if the category exists
+      if (product.category && product.category.name && product.category.image) {
+        // Add category name and image to the Map if it doesn't already exist
+        if (!categoriesMap.has(product.category.name)) {
+          categoriesMap.set(product.category.name, product.category.image);
+        }
+      }
+    });
+    
+    // Convert Map to array of objects and return
+    return Array.from(categoriesMap, ([name, image]) => ({ name, image }));
+  }
+  
+  const categories = getCategories(productData);
+  
 
   const chunkArray = (array, chunkSize) => {
     return Array.from({ length: Math.ceil(array.length / chunkSize) }, (_, index) => array.slice(index * chunkSize, (index + 1) * chunkSize));
   };
 
-  const productRows = chunkArray(productData, 2);
+  const productRows = chunkArray(filteredProducts.length > 0 ? filteredProducts : productData, 2);
 
   const navigationHandler = useCallback(() => {
     navigation.navigate("Search");
@@ -48,7 +70,7 @@ const CategoryScreen = () => {
       onPress={() => handleProductPress(item.id)}
     >
       <View style={styles.productContainer}>
-        <Image source={{uri:item.image}} style={styles.productImage} />
+        <Image source={{uri:item.images[0]}} style={styles.productImage} />
         <Text numberOfLines={1} style={styles.productTitle}>{item.title}</Text>
       </View>
     </TouchableOpacity>
@@ -67,28 +89,28 @@ const CategoryScreen = () => {
       </TouchableOpacity>
 
       <View style={styles.contentContainer}>
-        <FlatList
-          data={list}
-          renderItem={renderCategoryItem}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          style={styles.categoryList}
-        />
+      <FlatList
+  data={categories}
+  renderItem={renderCategoryItem}
+  keyExtractor={(item) => item.name} // Use category name as the key
+  horizontal
+  style={styles.categoryList}
+/>
 
-        <FlatList
-          data={productRows}
-          renderItem={({ item }) => (
-            <FlatList
-              data={item}
-              renderItem={renderProductItem}
-              keyExtractor={(product) => product.id.toString()}
-              numColumns={2}
-              showsVerticalScrollIndicator={false}
-              style={styles.productList}
-            />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+<FlatList
+  data={productRows}
+  renderItem={({ item }) => (
+    <FlatList
+      data={item}
+      renderItem={renderProductItem}
+      keyExtractor={(product, index) => product.id.toString()} // Use product ID as the key
+      numColumns={2}
+      showsVerticalScrollIndicator={false}
+      style={styles.productList}
+    />
+  )}
+  keyExtractor={(item, index) => index.toString()}
+/>
       </View>
     </View>
   );

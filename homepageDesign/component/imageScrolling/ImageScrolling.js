@@ -7,9 +7,10 @@ import SliderBoxScrollView from './SliderBoxScrollView';
 const ImageScrolling = ({ style }) => {
   // Images for the slider
   const images = [
-    "https://www.thestiffcollar.com/cdn/shop/files/stiffcollar_linen_kurta_collar_shirts.webp?v=1706101057",
-    "https://www.digitaltrends.com/wp-content/uploads/2023/09/The-Batman-TV.jpg?resize=1200%2C630&p=1",
-    "https://images4.alphacoders.com/112/1121892.jpg",
+    "https://images.tokopedia.net/img/cache/500-square/VqbcmM/2021/11/23/bb1a8bef-c1e8-4cfe-b1d5-e7a5f28b39ac.png",
+    "https://i.pinimg.com/736x/e5/21/d8/e521d87377d6aa66b462f3dbd87639ae.jpg",
+    "https://m.media-amazon.com/images/I/61cefoSfepS._AC_UF1000,1000_QL80_.jpg",
+    
   ];
 
   return (

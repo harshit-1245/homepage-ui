@@ -2,11 +2,12 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import useProductStore from '../../src/store/productStore';
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
+import { productData } from '../../apis/productApi';
 
 const Products = () => {
   const navigation = useNavigation(); // Initialize useNavigation hook
 
-  const { products, fetchProducts, loading } = useProductStore();
+  const { products, fetchProducts, loading } = useProductStore(); //used zustand
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -63,7 +64,7 @@ const Products = () => {
   return (
     <FlatList
       style={styles.container}
-      data={products}
+      data={productData}
       renderItem={renderProductItem}
       keyExtractor={keyExtractor}
       onEndReached={loadProducts}

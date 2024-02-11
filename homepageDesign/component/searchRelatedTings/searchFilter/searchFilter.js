@@ -1,20 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { productData } from "../../../apis/productApi";
 
 const SearchFilter = ({ input }) => {
   const navigation = useNavigation();
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    // Fetch products data
-    fetch('https://fakestoreapi.com/products')
-      .then(res => res.json())
-      .then(json => setProducts(json));
-  }, []);
 
   // Filter products based on the input text
-  const filteredProducts = products.filter(product => {
+  const filteredProducts = productData.filter(product => {
     const title = product.title?.toLowerCase() || '';
     const description = product.description?.toLowerCase() || '';
     const searchTerm = input.toLowerCase();
@@ -29,30 +22,28 @@ const SearchFilter = ({ input }) => {
   };
 
   // Render each product item
-  //usecallback
   const renderProductItem = useCallback(({ item }) => (
     <Pressable onPress={() => handleProductClick(item.id)} style={styles.pressableContainer}>
       <View style={styles.productItem}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: item.image }} style={styles.productImage} />
+          <Image source={{ uri: item.images[0] }} style={styles.productImage} />
         </View>
         <View style={styles.productInfo}>
           <Text style={styles.productTitle}>{item.title}</Text>
           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.productDescription}>
             {item.description}
           </Text>
-          <Text style={styles.productCategory}>{item.category}</Text>
+          <Text style={styles.productCategory}>{item.category.name}</Text> 
         </View>
       </View>
     </Pressable>
-  ),[handleProductClick])
+  ), [handleProductClick]);
 
   return (
-    //avoid using too much view
     <View style={styles.container}>
       <FlatList
         data={filteredProducts}
-        keyExtractor={(item) => item.id.toString()} //read docs
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderProductItem}
       />
     </View>

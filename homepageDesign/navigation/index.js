@@ -70,7 +70,7 @@ export default function AppNavigation() {
         <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
         <Stack.Screen name='Mobile' component={MobileLoginSceen} options={{ headerShown: false }} />
-        <Stack.Screen name='Product' component={ProductScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='Product' component={ProductScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
