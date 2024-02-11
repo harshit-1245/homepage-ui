@@ -38,14 +38,17 @@ const Products = () => {
         </Text>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.buyNowButton]}
-            onPress={() => navigation.navigate("Product",{
-              productId:item.id,
-            })} // Pass productId to handleBuyNow function
-          >
-            <Text style={styles.buttonText}>Buy Now</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+    style={[styles.button, styles.buyNowButton]}
+    onPress={() => navigation.navigate("Product", {
+        productId: item.id,
+        images: item.images,
+        title: item.title, // Include title in the navigation params
+        price:item.price,
+    })}
+>
+    <Text style={styles.buttonText}>Buy Now</Text>
+</TouchableOpacity>
 
           <TouchableOpacity style={[styles.button, styles.addToCartButton]}>
             <Text style={styles.buttonText}>Add to Cart</Text>
