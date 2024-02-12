@@ -1,19 +1,21 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons,FontAwesome6, AntDesign } from '@expo/vector-icons';
 import SlidingImages from '../../component/productDetailScroll/SlidingImages';
+import RelatedProducts from '../../component/RelatedProduct/RelatedProducts';
+
 
 const ProductScreen = () => {
+  const [wishList,setWishList]=useState(false)
   const navigation = useNavigation();
   const route = useRoute();
-  const productId = route.params.productId; // Access productId from params object
-  const images = route.params.images; // Access productId from params object
-  const title = route.params.title;
-  const price = route.params.price;
-  console.log(price)
-
+  const item = route.params.item; // Access productId from params object
   const [selectedSize, setSelectedSize] = useState(null);
+
+  const handleWishList=()=>{
+    setWishList(!wishList)
+  }
 
   // Set header options
   useLayoutEffect(() => {
@@ -37,11 +39,11 @@ const ProductScreen = () => {
   }, [navigation]);
 
   return (
-    <ScrollView style={styles.container}>
-      <SlidingImages images={images} sliderBoxHeight={300}/>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <SlidingImages images={item.images} sliderBoxHeight={300}/>
       <View style={styles.productDetailsContainer}>
-        <Text style={styles.productTitle}>{title}</Text>
-        <Text style={styles.productPrice}>${price}</Text>
+        <Text style={styles.productTitle}>{item.title}</Text>
+        <Text style={styles.productPrice}>${item.price}</Text>
         {/* Additional product details can be added here */}
       </View>
       <View style={styles.line}/>
@@ -74,6 +76,42 @@ const ProductScreen = () => {
             <Text style={[styles.sizeText, selectedSize === 'XXL' && styles.selectedSizeText]}>XXL</Text>
           </TouchableOpacity>
         </View>
+        <View style={styles.line1}/>
+        <View>
+  <Text style={styles.descriptionLabel}>Description</Text>
+  <Text style={styles.descriptionText}>{item.description}</Text>
+</View>
+<View style={styles.line1}/>
+{/* related product section */}
+<View style={styles.relatedProductContainer}>
+  <Text style={styles.relatedProductTitle}>Related Products You Might Like</Text>
+  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    <RelatedProducts item={item.category}/>
+  </ScrollView>
+</View>
+        {/* icons for shopping */}
+        <View style={styles.styleContainer}>
+  {/* Shopping section */}
+  <View style={styles.shoppingSection}>
+    <TouchableOpacity style={styles.iconContainer}>
+      <Ionicons name="cart-sharp" size={24} color="black" />
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.iconContainer}>
+      {wishList ? (
+        <AntDesign name="heart" size={24} color="black" />
+        
+      ):(
+<AntDesign onPress={handleWishList} name="hearto" size={24} color="black" />
+      )}
+    
+    </TouchableOpacity>
+    {/* Buy Now button */}
+    <TouchableOpacity style={styles.buyNowButton}>
+      <Text style={styles.buyNowButtonText}>Buy Now</Text>
+    </TouchableOpacity>
+  </View>
+</View>
+
       </View>
     </ScrollView>
   );
@@ -111,6 +149,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     width: '100%', // Adjust width as needed
   },
+  line1: {
+    marginTop:20,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    width: '100%', // Adjust width as needed
+  },
   sizeContainer: {
     alignItems: 'center',
     marginTop: 20,
@@ -144,6 +188,65 @@ const styles = StyleSheet.create({
   },
   selectedSizeText: {
     color: 'white', // Change text color when selected
+  },
+  descriptionLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  descriptionText: {
+    fontSize: 16,
+    color: '#555', // Adjust the color as needed
+    lineHeight: 24, // Adjust the line height as needed
+    marginTop: 10, // Add spacing above the description text
+    textAlign: 'justify', // Align text to justify
+    fontStyle: 'italic', // Apply italic style to the text
+  },
+  relatedProductContainer: {
+    marginTop: 10,
+    paddingHorizontal: 20,
+    height:249
+  },
+  relatedProductTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  styleContainer: {
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  styleContainer: {
+    paddingHorizontal: 20,
+    marginTop: 20,
+    marginBottom:10
+  },
+  shoppingSection: {
+    flexDirection: 'row', // Display items in the same row
+    justifyContent: 'space-between', // Adjust spacing between items
+    alignItems: 'center', // Align items vertically in the center
+  },
+  iconContainer: {
+    padding: 10,
+    marginHorizontal: 10, // Add margin for gap
+    borderWidth: 1, // Add border
+    borderColor: 'black', // Border color
+    borderRadius: 5, // Border radius
+    
+  },
+  buyNowButton: {
+    backgroundColor: '#e75480',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    width: '63%', // Set the width of the button
+    
+  },
+  buyNowButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center', // Center the text horizontally
   },
 });
 

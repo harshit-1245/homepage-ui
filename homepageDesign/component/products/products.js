@@ -41,10 +41,7 @@ const Products = () => {
         <TouchableOpacity
     style={[styles.button, styles.buyNowButton]}
     onPress={() => navigation.navigate("Product", {
-        productId: item.id,
-        images: item.images,
-        title: item.title, // Include title in the navigation params
-        price:item.price,
+        item:item,
     })}
 >
     <Text style={styles.buttonText}>Buy Now</Text>
