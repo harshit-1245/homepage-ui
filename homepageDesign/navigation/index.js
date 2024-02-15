@@ -56,7 +56,7 @@ export default function AppNavigation() {
           <MaterialBottomTab.Screen name='Category' component={CategoryScreen} />
           <MaterialBottomTab.Screen name='Notification' component={NotificationScreen} />
           <MaterialBottomTab.Screen name='Account' component={AccountScreen} />
-          <MaterialBottomTab.Screen name='Cart' component={CartScreen} />
+          <MaterialBottomTab.Screen name='Cart' component={CartScreen}/>
         </MaterialBottomTab.Navigator>
       </>
     );
@@ -71,6 +71,7 @@ export default function AppNavigation() {
         <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
         <Stack.Screen name='Mobile' component={MobileLoginSceen} options={{ headerShown: false }} />
         <Stack.Screen name='Product' component={ProductScreen} />
+      
       </Stack.Navigator>
     </NavigationContainer>
   );

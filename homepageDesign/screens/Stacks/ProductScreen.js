@@ -56,6 +56,28 @@ const ProductScreen = () => {
         <Text style={styles.sizeLabel}>Size</Text>
         <View style={styles.sizeOptionsContainer}>
           {/* Size options */}
+          <View style={styles.sizeOptionsContainer}>
+  <TouchableOpacity
+    onPress={() => setSelectedSize('S')}
+    style={selectedSize === 'S' ? [styles.sizeOption, styles.selectedSizeOption] : styles.sizeOption}>
+    <Text style={selectedSize === 'S' ? [styles.sizeText, styles.selectedSizeText] : styles.sizeText}>S</Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    onPress={() => setSelectedSize('M')}
+    style={selectedSize === 'M' ? [styles.sizeOption, styles.selectedSizeOption] : styles.sizeOption}>
+    <Text style={selectedSize === 'M' ? [styles.sizeText, styles.selectedSizeText] : styles.sizeText}>M</Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    onPress={() => setSelectedSize('L')}
+    style={selectedSize === 'L' ? [styles.sizeOption, styles.selectedSizeOption] : styles.sizeOption}>
+    <Text style={selectedSize === 'L' ? [styles.sizeText, styles.selectedSizeText] : styles.sizeText}>L</Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    onPress={() => setSelectedSize('XL')}
+    style={selectedSize === 'XL' ? [styles.sizeOption, styles.selectedSizeOption] : styles.sizeOption}>
+    <Text style={selectedSize === 'XL' ? [styles.sizeText, styles.selectedSizeText] : styles.sizeText}>XL</Text>
+  </TouchableOpacity>
+</View>
         </View>
         <View style={styles.line1} />
         <View>
