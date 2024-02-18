@@ -1,54 +1,57 @@
-import React from 'react';
-import { Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { AntDesign, EvilIcons, MaterialIcons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { AntDesign, EvilIcons, MaterialIcons, Entypo } from '@expo/vector-icons';
 
 const CartScreen = () => {
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsHorizontalScrollIndicator={false}>
-      {/* Header */}
-      <View style={styles.header}>
-        <AntDesign name="menu-fold" size={24} color="black" style={styles.icon} />
-        <Text style={styles.headerText}>My Cart</Text>
-      </View>
-      {/* Address Section */}
-      <Pressable style={styles.addressContainer}>
-        <EvilIcons name="location" size={24} color="black" style={styles.addressIcon} />
-        <View style={styles.addressTextContainer}>
-          <Text style={styles.addressText}>Deliver to:</Text>
-          <Text style={styles.address}>Harshit - Varanasi 232103</Text>
-        </View>
-        <Pressable style={styles.changeTextContainer}>
-          <Text style={styles.changeText}>Change</Text>
-        </Pressable>
-      </Pressable>
-      {/* Product Section */}
-      <View style={styles.productContainer}>
-        <Image source={require("../../assets/facebook.png")} style={styles.productImage}/>
-        <View style={styles.productDetails}>
-          <Text style={styles.productTitle}>Mens Clothing</Text>
-          <Text style={styles.productSize}>Size: S</Text>
-          <Text style={styles.productRating}>Rating</Text>
-          <Text style={styles.productStock}>In Stock</Text>
-          <View style={styles.actionContainer}>
-            <Pressable style={styles.findSimilarButton}>
-              <Text style={styles.findSimilarText}>Find Similar</Text>
-              <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+  const [stars, setStars] = useState([]);
+  // Sample data representing products in the cart
+  const cartProducts = [
+    { id: 1, title: 'Mens Clothing', size: 'S', rating: stars, stock: true, quantity: 3, imageUrl: require("../../assets/facebook.png") },
+    // Add more products as needed
+  ];
+  //generating rating randomly
+  
+
+  useEffect(() => {
+    const numberOfStars = Math.floor(Math.random() * 5) + 1;
+    const rating = [];
+
+    for (let i = 0; i < numberOfStars; i++) {
+      rating.push(<Entypo key={i} name="star" size={15} color="black" />);
+    }
+
+    setStars(rating);
+  }, []);
+
+  // Function to render each item in the FlatList
+  const renderItem = ({ item }) => (
+    <>
+    <View style={styles.productContainer}>
+      <Image source={item.imageUrl} style={styles.productImage}/>
+      <View style={styles.productDetails}>
+        <Text style={styles.productTitle}>{item.title}</Text>
+        <Text numberOfLines={4} style={styles.productSize}>Desc: {item.size}</Text>
+        <Text style={styles.productRating}>Rating: {item.rating}</Text>
+        <Text style={styles.productStock}>{item.stock ? 'In Stock' : 'Out of Stock'}</Text>
+        <View style={styles.actionContainer}>
+          <Pressable style={styles.findSimilarButton}>
+            <Text style={styles.findSimilarText}>Find Similar</Text>
+            <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
+          </Pressable>
+          <View style={styles.quantityContainer}>
+            <Text style={styles.quantityLabel}>Quantity:</Text>
+            <Pressable style={styles.quantityButton}>
+              <Text style={styles.quantityButtonText}>-</Text>
             </Pressable>
-            <View style={styles.quantityContainer}>
-              <Text style={styles.quantityLabel}>Quantity:</Text>
-              <Pressable style={styles.quantityButton}>
-                <Text style={styles.quantityButtonText}>-</Text>
-              </Pressable>
-              <Text style={styles.quantityText}>3</Text>
-              <Pressable style={styles.quantityButton}>
-                <Text style={styles.quantityButtonText}>+</Text>
-              </Pressable>
-            </View>
+            <Text style={styles.quantityText}>{item.quantity}</Text>
+            <Pressable style={styles.quantityButton}>
+              <Text style={styles.quantityButtonText}>+</Text>
+            </Pressable>
           </View>
         </View>
       </View>
-      <View style={styles.actionsContainer}>
+    </View>
+    <View style={styles.actionsContainer}>
         <Pressable style={styles.actionButton}>
           <MaterialIcons name="delete" size={24} color="black" />
           <Text style={styles.actionButtonText}>Remove</Text>
@@ -58,7 +61,33 @@ const CartScreen = () => {
           <Text style={styles.actionButtonText}>Save</Text>
         </Pressable>
       </View>
-      </ScrollView>
+    </>
+  );
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View>
+        <View style={styles.header}>
+          <AntDesign name="menu-fold" size={24} color="black" style={styles.icon} />
+          <Text style={styles.headerText}>My Cart</Text>
+        </View>
+        <Pressable style={styles.addressContainer}>
+          <EvilIcons name="location" size={24} color="black" style={styles.addressIcon} />
+          <View style={styles.addressTextContainer}>
+            <Text style={styles.addressText}>Deliver to:</Text>
+            <Text style={styles.address}>Harshit - Varanasi 232103</Text>
+          </View>
+          <Pressable style={styles.changeTextContainer}>
+            <Text style={styles.changeText}>Change</Text>
+          </Pressable>
+        </Pressable>
+      </View>
+      <FlatList
+        data={cartProducts}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+      />
+      
     </SafeAreaView>
   );
 };
@@ -163,7 +192,7 @@ const styles = StyleSheet.create({
   findSimilarButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    
+    fontWeight:"bold",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 4,
@@ -171,7 +200,7 @@ const styles = StyleSheet.create({
   },
   findSimilarText: {
     fontSize: 14,
-    color: '#666',
+    color: 'blue',
     marginRight: 8,
   },
   quantityContainer: {

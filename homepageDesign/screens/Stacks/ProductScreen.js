@@ -13,6 +13,8 @@ const ProductScreen = () => {
   const item = route.params.item; // Access productId from params object
   const [selectedSize, setSelectedSize] = useState(null);
 
+ 
+
   const handleWishList = () => {
     setWishList(!wishList);
   };

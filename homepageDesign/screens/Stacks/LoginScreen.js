@@ -227,7 +227,7 @@ const LoginScreen = () => {
   );
 };
 
-
+export default LoginScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -332,5 +332,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default LoginScreen;
