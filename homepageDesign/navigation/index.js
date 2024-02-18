@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
-import HomeScreen from '../screens/Stacks/HomeScreen';
-import CategoryScreen from '../screens/Stacks/CategoryScreen';
-import NotificationScreen from '../screens/Stacks/NotificationScreen';
-import AccountScreen from '../screens/Stacks/AccountScreen';
-import CartScreen from '../screens/Stacks/CartScreen';
-import { Text } from 'react-native';
-import SearchScreen from '../screens/Stacks/SearchScreen';
-import LoginScreen from '../screens/Stacks/LoginScreen';
-import RegisterScreen from '../screens/Stacks/RegisterScreen';
-import MobileLoginSceen from '../screens/Stacks/MobileLoginSceen';
-import ProductScreen from '../screens/Stacks/ProductScreen';
+import { Image, Text, View } from 'react-native';
+
+const HomeScreen = lazy(() => import('../screens/Stacks/HomeScreen'));
+const CategoryScreen = lazy(() => import('../screens/Stacks/CategoryScreen'));
+const NotificationScreen = lazy(() => import('../screens/Stacks/NotificationScreen'));
+const AccountScreen = lazy(() => import('../screens/Stacks/AccountScreen'));
+const CartScreen = lazy(() => import('../screens/Stacks/CartScreen'));
+const SearchScreen = lazy(() => import('../screens/Stacks/SearchScreen'));
+const LoginScreen = lazy(() => import('../screens/Stacks/LoginScreen'));
+const RegisterScreen = lazy(() => import('../screens/Stacks/RegisterScreen'));
+const MobileLoginSceen = lazy(() => import('../screens/Stacks/MobileLoginSceen'));
+const ProductScreen = lazy(() => import('../screens/Stacks/ProductScreen'));
 
 const Stack = createNativeStackNavigator();
 const MaterialBottomTab = createMaterialBottomTabNavigator();
@@ -21,7 +22,7 @@ const MaterialBottomTab = createMaterialBottomTabNavigator();
 export default function AppNavigation() {
   const BottomTabs = () => {
     return (
-      <>
+      <Suspense fallback={<LoadingIndicator />}>
         <MaterialBottomTab.Navigator
           shifting={true}
           screenOptions={({ route }) => ({
@@ -50,7 +51,13 @@ export default function AppNavigation() {
               );
             },
           })}
-          barStyle={{ backgroundColor: '#fff' }}
+          barStyle={{
+            backgroundColor: '#FFFFFF',
+            borderTopColor: '#CCCCCC',
+            borderTopWidth: 1,
+          }}
+          activeColor="black"
+          inactiveColor="black"
         >
           <MaterialBottomTab.Screen name='Home' component={HomeScreen} />
           <MaterialBottomTab.Screen name='Category' component={CategoryScreen} />
@@ -58,21 +65,26 @@ export default function AppNavigation() {
           <MaterialBottomTab.Screen name='Account' component={AccountScreen} />
           <MaterialBottomTab.Screen name='Cart' component={CartScreen}/>
         </MaterialBottomTab.Navigator>
-      </>
+      </Suspense>
     );
   };
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Main'>
-        <Stack.Screen name='Main' component={BottomTabs} options={{ headerShown: false }} />
-        <Stack.Screen name='Search' component={SearchScreen} options={{ headerShown: false }} />
-        <Stack.Screen name='Login' component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name='Register' component={RegisterScreen} options={{ headerShown: false }} />
-        <Stack.Screen name='Mobile' component={MobileLoginSceen} options={{ headerShown: false }} />
+      <Stack.Navigator initialRouteName='Main' screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Main' component={BottomTabs} />
+        <Stack.Screen name='Search' component={SearchScreen} />
+        <Stack.Screen name='Login' component={LoginScreen} />
+        <Stack.Screen name='Register' component={RegisterScreen} />
+        <Stack.Screen name='Mobile' component={MobileLoginSceen} />
         <Stack.Screen name='Product' component={ProductScreen} />
-      
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+const LoadingIndicator = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <Image source={require("../assets/3.gif")}/>
+  </View>
+);
