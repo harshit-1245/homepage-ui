@@ -13,20 +13,25 @@ const CartScreen = () => {
   useEffect(() => {
     const numberOfStars = Math.floor(Math.random() * 5) + 1;
     const rating = [];
-
+  
     for (let i = 0; i < numberOfStars; i++) {
       rating.push(<Entypo key={i} name="star" size={15} color="black" />);
     }
-
+  
     setStars(rating);
-
-    // Calculate total price
-    let total = 0;
-    cartItems.forEach(item => {
-      total += item.price * item.quantity;
-    });
-    setTotalPrice(total);
+  
+    // Calculate total price if cartItems is defined and not empty
+    if (cartItems && cartItems.length > 0) {
+      let total = 0;
+      cartItems.forEach(item => {
+        total += item.price * item.quantity;
+      });
+      setTotalPrice(total);
+    } else {
+      setTotalPrice(0); // Set total price to 0 if cartItems is undefined or empty
+    }
   }, [cartItems]);
+  
 
   const renderItem = ({ item }) => (
     <>

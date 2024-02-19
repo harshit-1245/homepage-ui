@@ -4,8 +4,10 @@ import { useRoute, useNavigation } from '@react-navigation/native';
 import { FontAwesome5, Ionicons, AntDesign } from '@expo/vector-icons';
 import SlidingImages from '../../component/productDetailScroll/SlidingImages';
 import RelatedProducts from '../../component/RelatedProduct/RelatedProducts';
+import useCartStore from '../../src/store/cartStore';
 
 const ProductScreen = () => {
+  const {addToCart}=useCartStore()
   const [wishList, setWishList] = useState(false);
   const [cartItemsCount, setCartItemsCount] = useState(3); // Example number of items in the cart
   const navigation = useNavigation();
@@ -98,7 +100,7 @@ const ProductScreen = () => {
         <View style={styles.styleContainer}>
           {/* Shopping section */}
           <View style={styles.shoppingSection}>
-            <TouchableOpacity style={styles.iconContainer}>
+            <TouchableOpacity onPress={()=>addToCart(item)} style={styles.iconContainer}>
               <Ionicons name="cart-sharp" size={24} color="black" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconContainer} onPress={handleWishList}>
