@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useLayoutEffect } from 'react';
 import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import useProductStore from '../../src/store/productStore';
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
+import { useNavigation,useRoute } from "@react-navigation/native"; // Import useNavigation hook
 import { productData } from '../../apis/productApi';
+import useCartStore from '../../src/store/cartStore';
 
 const Products = () => {
   const navigation = useNavigation(); // Initialize useNavigation hook
+  const {addToCart}=useCartStore()
 
   const { products, fetchProducts, loading } = useProductStore(); //used zustand
   const [page, setPage] = useState(1);
@@ -24,7 +26,26 @@ const Products = () => {
     loadCachedProducts();
   }, []);
 
-  
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle:"ρяσ∂υ¢т ∂єтαιℓѕ",
+      headerLeft: () => (
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => navigation.goBack()}>
+          <FontAwesome5 name="chevron-left" size={20} color="black" />
+        </TouchableOpacity>
+      ),
+      headerRight: () => (
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => {/* Handle cart action */}}>
+          <Ionicons name="cart-outline" size={24} color="black" />
+        </TouchableOpacity>
+      ) 
+    });
+  }, [navigation]);
+
 
 
   const renderProductItem = ({ item }) => (
@@ -47,7 +68,7 @@ const Products = () => {
     <Text style={styles.buttonText}>Buy Now</Text>
 </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, styles.addToCartButton]}>
+          <TouchableOpacity onPress={()=>addToCart(item)} style={[styles.button, styles.addToCartButton]}>
             <Text style={styles.buttonText}>Add to Cart</Text>
           </TouchableOpacity>
         </View>

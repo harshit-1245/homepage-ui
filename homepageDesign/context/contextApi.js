@@ -5,6 +5,7 @@ import base64 from 'base-64';
 export const UserType = createContext();
 
 const UserContext = ({ children }) => {
+  const [randomNumbers, setRandomNumbers] = useState([]);
   
   const [userId, setUserId] = useState('');
   const [authenticated, setAuthenticated] = useState(false); // New state to track authentication
@@ -36,25 +37,26 @@ const UserContext = ({ children }) => {
       // Handle error as needed
     }
   };
-  //fetching data for category screen just for testing
-  const fetchData=async()=>{
-    try {
-      const response = await fetch('https://dummyjson.com/products');
-      const data = await response.json();
-      setProducts(data)
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  
-  }
+
 
   useEffect(() => {
     decodeJwtToken();
-    fetchData()
+    generateRandomNumbers()
   }, []);
 
+  const generateRandomNumbers = () => {
+    let numbers = [];
+    for (let i = 0; i < 1; i++) {
+      let random = Math.floor(Math.random() * 100) + 1; // Random number between 1 and 100
+      numbers.push(random);
+    }
+    setRandomNumbers(numbers);
+  };
+
+  console.log(randomNumbers);
+
   return (
-    <UserType.Provider value={{ userId, setUserId, authenticated,setAuthenticated,products}}>
+    <UserType.Provider value={{ userId, setUserId, authenticated,setAuthenticated,products,randomNumbers}}>
       {children}
     </UserType.Provider>
   );

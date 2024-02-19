@@ -1,9 +1,10 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Image, Text, View } from 'react-native';
+import SplashScreen from '../screens/Stacks/SplashScreen';
 
 const HomeScreen = lazy(() => import('../screens/Stacks/HomeScreen'));
 const CategoryScreen = lazy(() => import('../screens/Stacks/CategoryScreen'));
@@ -20,6 +21,20 @@ const Stack = createNativeStackNavigator();
 const MaterialBottomTab = createMaterialBottomTabNavigator();
 
 export default function AppNavigation() {
+  const [splashVisible, setSplashVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSplashVisible(false);
+    }, 2000); // Adjust the duration of the splash screen as needed
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (splashVisible) {
+    return <SplashScreen />;
+  }
+
   const BottomTabs = () => {
     return (
       <Suspense fallback={<LoadingIndicator />}>
@@ -71,20 +86,23 @@ export default function AppNavigation() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Main' screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName={splashVisible ? 'Splash' : 'Main'} screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Main' component={BottomTabs} />
         <Stack.Screen name='Search' component={SearchScreen} />
         <Stack.Screen name='Login' component={LoginScreen} />
         <Stack.Screen name='Register' component={RegisterScreen} />
         <Stack.Screen name='Mobile' component={MobileLoginSceen} />
-        <Stack.Screen name='Product' component={ProductScreen} />
+        <Stack.Screen name='Product' component={ProductScreen} options={{headerShown:true}} />
+        {splashVisible && <Stack.Screen name='Splash' component={SplashScreen} />}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
+
+
 const LoadingIndicator = () => (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Image source={require("../assets/3.gif")}/>
+    <Image source={require("../assets/3.gif")} />
   </View>
 );
