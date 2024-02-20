@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useCallback, useLayoutEffect } from 'react';
-import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View } from 'react-native';
+import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View, Pressable } from 'react-native';
 import useProductStore from '../../src/store/productStore';
-import { useNavigation,useRoute } from "@react-navigation/native"; // Import useNavigation hook
+import { useNavigation, useRoute } from "@react-navigation/native"; // Import useNavigation hook
 import { productData } from '../../apis/productApi';
 import useCartStore from '../../src/store/cartStore';
+import { Ionicons, FontAwesome5, Entypo } from '@expo/vector-icons'; // Import icons from expo
 
 const Products = () => {
   const navigation = useNavigation(); // Initialize useNavigation hook
-  const {addToCart}=useCartStore()
+  const { addToCart } = useCartStore();
 
   const { products, fetchProducts, loading } = useProductStore(); //used zustand
   const [page, setPage] = useState(1);
@@ -26,26 +27,6 @@ const Products = () => {
     loadCachedProducts();
   }, []);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle:"ρяσ∂υ¢т ∂єтαιℓѕ",
-      headerLeft: () => (
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => navigation.goBack()}>
-          <FontAwesome5 name="chevron-left" size={20} color="black" />
-        </TouchableOpacity>
-      ),
-      headerRight: () => (
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => {/* Handle cart action */}}>
-          <Ionicons name="cart-outline" size={24} color="black" />
-        </TouchableOpacity>
-      ) 
-    });
-  }, [navigation]);
-
 
 
   const renderProductItem = ({ item }) => (
@@ -59,17 +40,23 @@ const Products = () => {
         </Text>
 
         <View style={styles.buttonContainer}>
-        <TouchableOpacity
-    style={[styles.button, styles.buyNowButton]}
-    onPress={() => navigation.navigate("Product", {
-        item:item,
-    })}
->
-    <Text style={styles.buttonText}>Buy Now</Text>
-</TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.buyNowButton]}
+            onPress={() => navigation.navigate("Product", {
+              item: item,
+            })}
+          >
+            <View style={styles.buttonText}>
+              <Image style={{ width: 20, height: 20 }} source={require("../../assets/production.png")} />
+           
+            </View>
+          </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>addToCart(item)} style={[styles.button, styles.addToCartButton]}>
-            <Text style={styles.buttonText}>Add to Cart</Text>
+          <TouchableOpacity onPress={() => addToCart(item)} style={[styles.button, styles.addToCartButton]}>
+            <View style={styles.buttonText}>
+              <Entypo name="shopping-cart" size={24} color="#27ae60" />
+             
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -83,16 +70,20 @@ const Products = () => {
   );
 
   return (
-    <FlatList
-      style={styles.container}
-      data={productData}
-      renderItem={renderProductItem}
-      keyExtractor={keyExtractor}
-      onEndReached={loadProducts}
-      onEndReachedThreshold={0.5}
-      ListFooterComponent={renderFooter}
-      ListHeaderComponent={<Text style={styles.headerText}>Products</Text>}
-    />
+    <>
+      <FlatList
+        style={styles.container}
+        data={productData}
+        renderItem={renderProductItem}
+        keyExtractor={keyExtractor}
+        onEndReached={loadProducts}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={renderFooter}
+        ListHeaderComponent={<Text style={styles.headerText}>Products</Text>}
+
+      />
+
+    </>
   );
 };
 
@@ -149,20 +140,24 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     padding: 12,
-    borderRadius: 4,
+    borderRadius: 20,
     alignItems: 'center',
   },
   buyNowButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#fff',
     marginRight: 8,
+    borderWidth: 2,
+    borderColor: '#3498db',
   },
   addToCartButton: {
-    backgroundColor: '#27ae60',
+    backgroundColor: '#fff',
     marginLeft: 8,
+    borderWidth: 2,
+    borderColor: '#27ae60',
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

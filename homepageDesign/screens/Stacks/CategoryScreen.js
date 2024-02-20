@@ -1,9 +1,7 @@
 import React, { useState, useCallback, useContext } from 'react';
-import { Image, FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { Image, FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import { list } from '../../json/list';
-import { UserType } from '../../context/contextApi';
 import { productData } from '../../apis/productApi';
 
 const CategoryScreen = () => {
@@ -50,9 +48,7 @@ const CategoryScreen = () => {
     navigation.navigate("Search");
   }, [navigation]);
 
-  const handleProductPress = useCallback((productId) => {
-    console.log(`Product with ID ${productId} pressed`);
-  }, []);
+  
 
   const renderCategoryItem = useCallback(({ item }) => (
     <TouchableOpacity
@@ -66,15 +62,18 @@ const CategoryScreen = () => {
 
   const renderProductItem = useCallback(({ item }) => (
     <TouchableOpacity
+    
       style={styles.productItem}
-      onPress={() => handleProductPress(item.id)}
+      onPress={() => navigation.navigate("Product",{
+        item:item,
+      })}
     >
       <View style={styles.productContainer}>
         <Image source={{uri:item.images[0]}} style={styles.productImage} />
         <Text numberOfLines={1} style={styles.productTitle}>{item.title}</Text>
       </View>
     </TouchableOpacity>
-  ), [handleProductPress]);
+  ), [navigation]);
 
   return (
     <View style={styles.container}>
