@@ -2,11 +2,14 @@ import React, { createContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import base64 from 'base-64';
 import axios from "axios"
+import useCartStore from '../src/store/cartStore';
+import { Alert } from 'react-native';
 
 export const UserType = createContext();
 
 const UserContext = ({ children }) => {
   const [randomNumbers, setRandomNumbers] = useState([]);
+  const { cartItems,addToCart } = useCartStore();
   
   const [userId, setUserId] = useState('');
   const [authenticated, setAuthenticated] = useState(false); // New state to track authentication
@@ -39,6 +42,8 @@ const UserContext = ({ children }) => {
       // Handle error as needed
     }
   };
+ 
+  
 
 
   

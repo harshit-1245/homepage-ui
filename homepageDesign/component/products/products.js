@@ -60,7 +60,7 @@ const Products = () => {
       }
     }
   };
-
+ 
 
 
   const renderProductItem = ({ item }) => (

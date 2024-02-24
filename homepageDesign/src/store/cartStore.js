@@ -51,12 +51,6 @@ const useCartStore = create((set) => ({
     });
   },
 
-  totalItemsInCart: () => {
-    // Calculate the total items in the cart
-    return set((state) =>
-      state.cartItems.reduce((total, item) => total + item.quantity, 0)
-    );
-  },
 }));
 
 export default useCartStore;
