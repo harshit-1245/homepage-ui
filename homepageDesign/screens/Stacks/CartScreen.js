@@ -4,6 +4,7 @@ import { AntDesign, EvilIcons, MaterialIcons, Entypo } from '@expo/vector-icons'
 import { UserType } from "../../context/contextApi";
 import useCartStore from '../../src/store/cartStore';
 
+
 const CartScreen = () => {
   const { cartItems, removeFromCart, handleCartProductQuantity } = useCartStore();
   const { randomNumbers } = useContext(UserType);
@@ -31,6 +32,9 @@ const CartScreen = () => {
       setTotalPrice(0); // Set total price to 0 if cartItems is undefined or empty
     }
   }, [cartItems]);
+
+  //geting CartItem
+ 
   
 
   const renderItem = ({ item }) => (

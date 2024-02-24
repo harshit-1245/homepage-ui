@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import base64 from 'base-64';
+import axios from "axios"
 
 export const UserType = createContext();
 
@@ -10,6 +11,7 @@ const UserContext = ({ children }) => {
   const [userId, setUserId] = useState('');
   const [authenticated, setAuthenticated] = useState(false); // New state to track authentication
   const [products,setProducts]=useState({})
+  
 
   const decodeJwtToken = async () => {
     try {
@@ -39,10 +41,13 @@ const UserContext = ({ children }) => {
   };
 
 
+  
   useEffect(() => {
     decodeJwtToken();
-    generateRandomNumbers()
+    generateRandomNumbers();
+    
   }, []);
+  
 
   const generateRandomNumbers = () => {
     let numbers = [];
@@ -53,7 +58,7 @@ const UserContext = ({ children }) => {
     setRandomNumbers(numbers);
   };
 
-  console.log(randomNumbers);
+  
 
   return (
     <UserType.Provider value={{ userId, setUserId, authenticated,setAuthenticated,products,randomNumbers}}>

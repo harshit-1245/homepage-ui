@@ -1,19 +1,29 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, FlatList, Image } from 'react-native';
-
-const { width } = Dimensions.get('window');
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
+import axios from "axios"
 
 const CartItem = () => {
-  const cartItems = [
-    { id: 1, title: "TedheMedhe", image: "https://dookan.com/cdn/shop/products/Kurkure-Naughty-Tomato-90-g_a6f3f8ab-7022-41e6-9523-0ba92fed706a.png?v=1701352858", offer: "83%" },
-    { id: 2, title: "Java Book", image: "https://5.imimg.com/data5/UH/FC/MY-28838716/java-3a-the-complete-reference-seventh-edition.png", offer: "75%" },
-    { id: 3, title: "iPhone 15 pro", image: "https://www.imagineonline.store/cdn/shop/files/iPhone_15_Pink_PDP_Image_Position-1__en-IN_823x.jpg?v=1694605258", offer: "66%" }
-  ];
-
+  const [cartItem,setCartItem]=useState([])
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://192.168.29.163:4000/getCart");
+      // Assuming the response contains an array of cart items
+      const fetchedItems = response.data.data.cartItem;
+      // Assuming each item has an `images` property which is an array of image URLs
+      setCartItem(fetchedItems);
+      
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+useEffect(()=>{
+ fetchData()
+},[])
   const renderCartItem = ({ item }) => {
+   
     return (
       <View style={styles.cartItemContainer}>
-        <Image source={{ uri: item.image }} style={styles.cartItemImage} />
+        <Image source={{ uri: item.images[0] }} style={styles.cartItemImage} />
         <View style={styles.cartItemDetails}>
           <Text style={styles.cartItemTitle}>{item.title}</Text>
           <Text style={styles.cartItemOffer}>{item.offer} off</Text>
@@ -26,13 +36,13 @@ const CartItem = () => {
     <View style={styles.container}>
       <Text style={styles.cartText}>Your Shopping Cart</Text>
       <FlatList
-        data={cartItems}
-        renderItem={renderCartItem}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.cartItemsList}
-      />
+  data={cartItem}
+  renderItem={renderCartItem}
+  keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  style={styles.cartItemsList}
+/>
       <TouchableOpacity
         style={styles.cartButton}
         onPress={() => console.log("Navigate to Cart")}

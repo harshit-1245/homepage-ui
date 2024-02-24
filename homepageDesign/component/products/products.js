@@ -1,18 +1,20 @@
 import React, { useEffect, useState, useCallback, useLayoutEffect } from 'react';
-import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View, Pressable } from 'react-native';
+import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View, Pressable, Alert } from 'react-native';
 import useProductStore from '../../src/store/productStore';
 import { useNavigation, useRoute } from "@react-navigation/native"; // Import useNavigation hook
 import { productData } from '../../apis/productApi';
 import useCartStore from '../../src/store/cartStore';
 import { Ionicons, FontAwesome5, Entypo } from '@expo/vector-icons'; // Import icons from expo
+import axios from"axios"
 
 const Products = () => {
   const navigation = useNavigation(); // Initialize useNavigation hook
-  const { addToCart } = useCartStore();
+  const { cartItems,addToCart } = useCartStore();
 
   const { products, fetchProducts, loading } = useProductStore(); //used zustand
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+
 
   const loadProducts = useCallback(() => {
     fetchProducts(page, pageSize);
@@ -26,6 +28,38 @@ const Products = () => {
   useEffect(() => {
     loadCachedProducts();
   }, []);
+  const handleCart = async (item) => {
+    try {
+      const itemInCart=cartItems.some(cartItem=>cartItem.id === item.id);
+      if (itemInCart) {
+        // Show an alert if the item is already in the cart
+        Alert.alert('Item Already in Cart', 'This item is already in your cart.');
+      } else{
+        const response = await axios.post('http://192.168.29.163:4000/cart', {
+          title: item.title,
+          images: item.images[0],
+          description:item.description,
+          price:item.price
+         
+        });
+        if(response.status === 201){
+          
+          addToCart(item)
+        }
+      }
+      // Make an HTTP POST request to your backend API endpoint
+      
+       
+     
+    } catch (error) {
+      console.error('Error while sending data to backend:', error);
+
+      // Log the error response from the server if available
+      if (error.response) {
+        console.error('Error response from server:', error.response.data);
+      }
+    }
+  };
 
 
 
@@ -52,7 +86,7 @@ const Products = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => addToCart(item)} style={[styles.button, styles.addToCartButton]}>
+          <TouchableOpacity onPress={() => handleCart(item)} style={[styles.button, styles.addToCartButton]}>
             <View style={styles.buttonText}>
               <Entypo name="shopping-cart" size={24} color="#27ae60" />
              

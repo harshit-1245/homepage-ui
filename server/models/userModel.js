@@ -55,19 +55,6 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
-  cartItems: [
-    {
-      product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-        required: true,
-      },
-      quantity: {
-        type: Number,
-        default: 1,
-      },
-    },
-  ],
 });
 
 // Hash the password before saving it to the database
