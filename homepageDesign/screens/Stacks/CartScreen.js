@@ -5,8 +5,9 @@ import { UserType } from "../../context/contextApi";
 import useCartStore from '../../src/store/cartStore';
 
 const CartScreen = () => {
+ 
   const { cartItems, removeFromCart, handleCartProductQuantity } = useCartStore();
-  const { randomNumbers } = useContext(UserType);
+  const { randomNumbers} = useContext(UserType);
   const [stars, setStars] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 

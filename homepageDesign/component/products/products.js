@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useCallback, useLayoutEffect, useContext } from 'react';
 import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View, Pressable, Alert } from 'react-native';
 import useProductStore from '../../src/store/productStore';
 import { useNavigation, useRoute } from "@react-navigation/native"; // Import useNavigation hook
@@ -6,8 +6,10 @@ import { productData } from '../../apis/productApi';
 import useCartStore from '../../src/store/cartStore';
 import { Ionicons, FontAwesome5, Entypo } from '@expo/vector-icons'; // Import icons from expo
 import axios from"axios"
+import { UserType } from '../../context/contextApi';
 
 const Products = () => {
+  const {userId}=useContext(UserType)
   const navigation = useNavigation(); // Initialize useNavigation hook
   const { cartItems,addToCart } = useCartStore();
 
@@ -39,8 +41,7 @@ const Products = () => {
           title: item.title,
           images: item.images[0],
           description:item.description,
-          price:item.price
-         
+          price:item.price,
         });
         if(response.status === 201){
           
