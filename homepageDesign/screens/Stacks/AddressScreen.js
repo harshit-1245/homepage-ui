@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { Feather, Entypo, MaterialIcons } from '@expo/vector-icons';
+import { Feather, Entypo, MaterialIcons,FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const AddressScreen = () => {
@@ -15,15 +15,25 @@ const AddressScreen = () => {
   const renderAddressItem = ({ item }) => (
     <View style={styles.addressContainer}>
       <View style={styles.addressInfoContainer}>
+        
+        <View style={{flexDirection:"row"}}>
         <Text style={styles.addressName}>John Doe</Text>
+        <Entypo name="location-pin" size={24} color="red" style={styles.locationIcon} />
+        </View>
+        
         <View style={styles.addressDetails}>
-          <Entypo name="location-pin" size={24} color="red" style={styles.locationIcon} />
-          <View>
+        <Entypo name="circle" size={24} color="black" />
+        {/* <FontAwesome5 name="dot-circle" size={24} color="black" /> */}
+        
+          
+          <View style={{marginLeft:20,borderWidth:1,borderColor:"black",paddingRight:100}}>
+            <View style={{marginLeft:10,margin:10}}>
             <Text style={styles.addressText}>House no, Landmark</Text>
             <Text style={styles.addressText}>Street</Text>
             <Text style={styles.addressText}>India, Varanasi</Text>
             <Text style={styles.addressText}>Mobile: 9999999999</Text>
             <Text style={styles.addressText}>Postal Code: 232103</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -158,6 +168,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   locationIcon: {
+    
     marginRight: 5,
   },
   addressText: {
