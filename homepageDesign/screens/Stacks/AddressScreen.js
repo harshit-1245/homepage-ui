@@ -5,12 +5,16 @@ import { useNavigation } from '@react-navigation/native';
 
 const AddressScreen = () => {
   const [address, setAddress] = useState([]);
+  const [select,setSelect]=useState(false)
   const navigation = useNavigation();
   const addresses=[
     {
 
     }
   ]
+  const handleSelect=()=>{
+    setSelect(!select)
+  }
 
   const renderAddressItem = ({ item }) => (
     <View style={styles.addressContainer}>
@@ -22,8 +26,14 @@ const AddressScreen = () => {
         </View>
         
         <View style={styles.addressDetails}>
-        <Entypo name="circle" size={24} color="black" />
-        {/* <FontAwesome5 name="dot-circle" size={24} color="black" /> */}
+          {select ? (
+             <FontAwesome5 name="dot-circle" size={24} color="black" />
+       
+          ):(
+            <Entypo onPress={handleSelect} name="circle" size={24} color="black" />
+          )}
+        
+        
         
           
           <View style={{marginLeft:20,borderWidth:1,borderColor:"black",paddingRight:100}}>
