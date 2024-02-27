@@ -5,8 +5,9 @@ import { useNavigation } from "@react-navigation/native";
 import { productData } from '../../apis/productApi';
 
 const CategoryScreen = () => {
-  
   const navigation = useNavigation();
+
+  
   const [selectedCategory, setSelectedCategory] = useState('Electronics');
   const [filteredProducts, setFilteredProducts] = useState([]);
 

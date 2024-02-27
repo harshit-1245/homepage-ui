@@ -29,7 +29,7 @@ const MobileLoginScreen = () => {
       setOtp('');
    }
   };
-  console.log(otp)
+  
 
   const handleVerifyOtp = async() => {
     try {

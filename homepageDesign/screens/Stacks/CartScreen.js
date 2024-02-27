@@ -3,9 +3,11 @@ import { FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from
 import { AntDesign, EvilIcons, MaterialIcons, Entypo } from '@expo/vector-icons';
 import { UserType } from "../../context/contextApi";
 import useCartStore from '../../src/store/cartStore';
+import { useNavigation } from "@react-navigation/native";
 
 const CartScreen = () => {
- 
+  const navigation = useNavigation();
+
   const { cartItems, removeFromCart, handleCartProductQuantity } = useCartStore();
   const { randomNumbers} = useContext(UserType);
   const [stars, setStars] = useState([]);
@@ -33,6 +35,9 @@ const CartScreen = () => {
     }
   }, [cartItems]);
   
+  const handleChange=()=>{
+    navigation.navigate("Address")
+  }
 
   const renderItem = ({ item }) => (
     <>
@@ -89,7 +94,7 @@ const CartScreen = () => {
             <Text style={styles.addressText}>Deliver to:</Text>
             <Text style={styles.address}>Harshit - Varanasi 232103</Text>
           </View>
-          <Pressable style={styles.changeTextContainer}>
+          <Pressable onPress={handleChange} style={styles.changeTextContainer}>
             <Text style={styles.changeText}>Change</Text>
           </Pressable>
         </Pressable>

@@ -5,6 +5,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Image, Text, View } from 'react-native';
 import SplashScreen from '../screens/Stacks/SplashScreen';
+import AddressScreen from '../screens/Stacks/AddressScreen';
 
 const HomeScreen = lazy(() => import('../screens/Stacks/HomeScreen'));
 const CategoryScreen = lazy(() => import('../screens/Stacks/CategoryScreen'));
@@ -92,6 +93,7 @@ export default function AppNavigation() {
         <Stack.Screen name='Login' component={LoginScreen} />
         <Stack.Screen name='Register' component={RegisterScreen} />
         <Stack.Screen name='Mobile' component={MobileLoginSceen} />
+        <Stack.Screen name='Address' component={AddressScreen} />
         <Stack.Screen name='Product' component={ProductScreen} options={{headerShown:true}} />
         {splashVisible && <Stack.Screen name='Splash' component={SplashScreen} />}
       </Stack.Navigator>
