@@ -1,49 +1,53 @@
 import React, { useContext, useState } from 'react';
-import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { Feather, Entypo, MaterialIcons,FontAwesome5 } from '@expo/vector-icons';
+import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Feather, Entypo, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import useSWR from 'swr'
+import useSWR from 'swr';
 import { UserType } from '../../context/contextApi';
+
 const AddressScreen = () => {
-  const [addresses,setAddresses]=useState([])
-  const {userId}=useContext(UserType)
+  const { userId } = useContext(UserType);
   const { data, error } = useSWR(`http://192.168.29.163:4000/getAddress/${userId}`, async (url) => {
     const response = await fetch(url);
     const data = await response.json();
-    setAddresses(data)
-    
+    return data;
   });
 
-
-  const [select,setSelect]=useState(false)
   const navigation = useNavigation();
-  
-  const handleSelect=()=>{
-    setSelect(!select)
-  }
+
+  const [selectedAddress, setSelectedAddress] = useState(null);
+
+  const handleSelect = (item) => {
+    if (selectedAddress && selectedAddress._id === item._id) {
+      setSelectedAddress(null); // Deselect if already selected
+    } else {
+      setSelectedAddress(item); // Select the address
+    }
+  };
 
   const renderAddressItem = ({ item }) => (
-    console.log(item),
     <View style={styles.addressContainer}>
       <View style={styles.addressInfoContainer}>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: 'row' }}>
           <Text style={styles.addressName}>{item.name}</Text>
           <Entypo name="location-pin" size={24} color="red" style={styles.locationIcon} />
         </View>
-        
+
         <View style={styles.addressDetails}>
-          {select ? (
+          {selectedAddress && selectedAddress._id === item._id ? (
             <FontAwesome5 name="dot-circle" size={24} color="black" />
           ) : (
-            <Entypo onPress={handleSelect} name="circle" size={24} color="black" />
+            <Entypo onPress={() => handleSelect(item)} name="circle" size={24} color="black" />
           )}
-          
-          <View style={{ marginLeft: 20, borderWidth: 1, borderColor: "black", paddingRight: 100 }}>
+
+          <View style={{ marginLeft: 20, borderWidth: 1, borderColor: 'black', paddingRight: 100 }}>
             <View style={{ marginLeft: 10, margin: 10 }}>
-              <Text style={styles.addressText}>{item.address}</Text>
+              <Text style={styles.addressText}>{item.houseNo}</Text>
               <Text style={styles.addressText}>{item.street}</Text>
-              <Text style={styles.addressText}>{item.city}, {item.state}</Text>
-              <Text style={styles.addressText}>Mobile: {item.mobile}</Text>
+              <Text style={styles.addressText}>
+                {item.landmark}, {item.state}
+              </Text>
+              <Text style={styles.addressText}>Mobile: {item.mobileNo}</Text>
               <Text style={styles.addressText}>Postal Code: {item.postalCode}</Text>
             </View>
           </View>
@@ -62,33 +66,31 @@ const AddressScreen = () => {
       </View>
     </View>
   );
-  
-  
-  
-  
 
   return (
-    <SafeAreaView style={{marginTop: 37}}>
+    <SafeAreaView style={{ marginTop: 37 }}>
       <FlatList
-        data={addresses}
-        keyExtractor={(item) => item.id.toString()}
+        data={data?.addresses || []}
+        keyExtractor={(item) => item._id}
         renderItem={renderAddressItem}
         ListHeaderComponent={() => (
           <>
-            <Pressable onPress={()=>navigation.navigate("Search")} style={styles.searchContainer}>
+            <Pressable onPress={() => navigation.navigate('Search')} style={styles.searchContainer}>
               <Feather name="search" size={25} color="black" style={styles.searchIcon} />
-              <View style={styles.searchInput}><Text>Search For Product</Text></View>
+              <View style={styles.searchInput}>
+                <Text>Search For Product</Text>
+              </View>
               <Feather name="mic" size={22} color="black" style={styles.micIcon} />
             </Pressable>
 
             <View style={styles.headerContainer}>
               <Text style={styles.headerText}>Your Address</Text>
               <Pressable onPress={() => navigation.navigate('AddAddress')} style={styles.addAddress}>
-                <Text style={{color:"blue"}}>Add a new Address</Text>
+                <Text style={{ color: 'blue' }}>Add a new Address</Text>
                 <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
               </Pressable>
             </View>
-            <View style={styles.line}/>
+            <View style={styles.line} />
           </>
         )}
       />
