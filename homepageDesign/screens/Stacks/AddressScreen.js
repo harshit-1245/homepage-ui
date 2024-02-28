@@ -1,48 +1,50 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Feather, Entypo, MaterialIcons,FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
+import useSWR from 'swr'
+import { UserType } from '../../context/contextApi';
 const AddressScreen = () => {
-  const [address, setAddress] = useState([]);
+  const [addresses,setAddresses]=useState([])
+  const {userId}=useContext(UserType)
+  const { data, error } = useSWR(`http://192.168.29.163:4000/getAddress/${userId}`, async (url) => {
+    const response = await fetch(url);
+    const data = await response.json();
+    setAddresses(data)
+    
+  });
+
+
   const [select,setSelect]=useState(false)
   const navigation = useNavigation();
-  const addresses=[
-    {
-
-    }
-  ]
+  
   const handleSelect=()=>{
     setSelect(!select)
   }
 
   const renderAddressItem = ({ item }) => (
+    console.log(item),
     <View style={styles.addressContainer}>
       <View style={styles.addressInfoContainer}>
-        
-        <View style={{flexDirection:"row"}}>
-        <Text style={styles.addressName}>John Doe</Text>
-        <Entypo name="location-pin" size={24} color="red" style={styles.locationIcon} />
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.addressName}>{item.name}</Text>
+          <Entypo name="location-pin" size={24} color="red" style={styles.locationIcon} />
         </View>
         
         <View style={styles.addressDetails}>
           {select ? (
-             <FontAwesome5 name="dot-circle" size={24} color="black" />
-       
-          ):(
+            <FontAwesome5 name="dot-circle" size={24} color="black" />
+          ) : (
             <Entypo onPress={handleSelect} name="circle" size={24} color="black" />
           )}
-        
-        
-        
           
-          <View style={{marginLeft:20,borderWidth:1,borderColor:"black",paddingRight:100}}>
-            <View style={{marginLeft:10,margin:10}}>
-            <Text style={styles.addressText}>House no, Landmark</Text>
-            <Text style={styles.addressText}>Street</Text>
-            <Text style={styles.addressText}>India, Varanasi</Text>
-            <Text style={styles.addressText}>Mobile: 9999999999</Text>
-            <Text style={styles.addressText}>Postal Code: 232103</Text>
+          <View style={{ marginLeft: 20, borderWidth: 1, borderColor: "black", paddingRight: 100 }}>
+            <View style={{ marginLeft: 10, margin: 10 }}>
+              <Text style={styles.addressText}>{item.address}</Text>
+              <Text style={styles.addressText}>{item.street}</Text>
+              <Text style={styles.addressText}>{item.city}, {item.state}</Text>
+              <Text style={styles.addressText}>Mobile: {item.mobile}</Text>
+              <Text style={styles.addressText}>Postal Code: {item.postalCode}</Text>
             </View>
           </View>
         </View>
@@ -63,12 +65,13 @@ const AddressScreen = () => {
   
   
   
+  
 
   return (
     <SafeAreaView style={{marginTop: 37}}>
       <FlatList
         data={addresses}
-        // keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={renderAddressItem}
         ListHeaderComponent={() => (
           <>
@@ -80,7 +83,7 @@ const AddressScreen = () => {
 
             <View style={styles.headerContainer}>
               <Text style={styles.headerText}>Your Address</Text>
-              <Pressable onPress={() => navigation.navigate('Add')} style={styles.addAddress}>
+              <Pressable onPress={() => navigation.navigate('AddAddress')} style={styles.addAddress}>
                 <Text style={{color:"blue"}}>Add a new Address</Text>
                 <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
               </Pressable>

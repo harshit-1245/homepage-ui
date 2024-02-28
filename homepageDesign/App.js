@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 
 
+
+
 import { StyleSheet, Text, View } from 'react-native';
 
 
@@ -14,9 +16,15 @@ import UserContext from './context/contextApi';
 export default function App() {
   return (
     <>
+  
+
+    
      <UserContext>
+      
   <AppNaviagtion/>
+  
   </UserContext>
+ 
   
     </>
   );

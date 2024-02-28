@@ -6,6 +6,8 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Image, Text, View } from 'react-native';
 import SplashScreen from '../screens/Stacks/SplashScreen';
 import AddressScreen from '../screens/Stacks/AddressScreen';
+import AddAddressScreen from '../screens/Stacks/AddAddressScreen';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const HomeScreen = lazy(() => import('../screens/Stacks/HomeScreen'));
 const CategoryScreen = lazy(() => import('../screens/Stacks/CategoryScreen'));
@@ -22,6 +24,7 @@ const Stack = createNativeStackNavigator();
 const MaterialBottomTab = createMaterialBottomTabNavigator();
 
 export default function AppNavigation() {
+ 
   const [splashVisible, setSplashVisible] = useState(true);
 
   useEffect(() => {
@@ -86,6 +89,7 @@ export default function AppNavigation() {
   };
 
   return (
+    
     <NavigationContainer>
       <Stack.Navigator initialRouteName={splashVisible ? 'Splash' : 'Main'} screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Main' component={BottomTabs} />
@@ -95,9 +99,11 @@ export default function AppNavigation() {
         <Stack.Screen name='Mobile' component={MobileLoginSceen} />
         <Stack.Screen name='Address' component={AddressScreen} />
         <Stack.Screen name='Product' component={ProductScreen} options={{headerShown:true}} />
+        <Stack.Screen name='AddAddress' component={AddAddressScreen} options={{headerShown:true}} />
         {splashVisible && <Stack.Screen name='Splash' component={SplashScreen} />}
       </Stack.Navigator>
     </NavigationContainer>
+    
   );
 }
 
