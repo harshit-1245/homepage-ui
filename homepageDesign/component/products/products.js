@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"; // Import us
 import { productData } from '../../apis/productApi';
 import useCartStore from '../../src/store/cartStore';
 import { Ionicons, FontAwesome5, Entypo } from '@expo/vector-icons'; // Import icons from expo
-import axios from"axios"
+
 import { UserType } from '../../context/contextApi';
 
 const Products = () => {
