@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import React from 'react';
+import { Text, View } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
+import useCartStore from '../../src/store/cartStore';
 
 const NotificationScreen = () => {
-  const [stars, setStars] = useState([]);
+  const { cartItems } = useCartStore();
 
- // Empty dependency array ensures this effect runs only once
+  // Calculate total count of items in the cart
+  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <View style={{ flexDirection: 'row' }}>
-    
+    <View style={{ flexDirection: 'row',marginTop:50 }}>
+      <Entypo name="shopping-cart" size={24} color="black" />
+      <Text>{cartItemCount}</Text> 
     </View>
   );
 }

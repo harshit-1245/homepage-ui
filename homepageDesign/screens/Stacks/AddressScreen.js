@@ -1,20 +1,44 @@
 import React, { useContext, useState } from 'react';
-import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, SafeAreaView, StyleSheet, Text, View,ToastAndroid } from 'react-native';
 import { Feather, Entypo, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import useSWR from 'swr';
 import { UserType } from '../../context/contextApi';
+import axios from "axios"
 
 const AddressScreen = () => {
+  const [token, setToken] = useState("")
   const { userId } = useContext(UserType);
   const { data, error } = useSWR(`http://192.168.29.163:4000/getAddress/${userId}`, async (url) => {
     const response = await fetch(url);
     const data = await response.json();
+    if (data.addresses && data.addresses.length > 0) {
+      setToken(data.addresses[0].token); // Extract token from the first address and set it
+    }
     return data;
   });
 
-  const navigation = useNavigation();
+  //for removing address
+  const handleRemove = async (item) => {
+    try {
+      const response = await axios.post(`http://192.168.29.163:4000/removeAdd`, {
+        userId: userId,
+        addressId: item._id, // Pass the ID of the selected address
+        
+      });
+      // Handle success
+      ToastAndroid.showWithGravity(
+        "Successfully removed, refresh it",
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
+  };
 
+  const navigation = useNavigation();
   const [selectedAddress, setSelectedAddress] = useState(null);
 
   const handleSelect = (item) => {
@@ -57,7 +81,7 @@ const AddressScreen = () => {
         <Pressable style={styles.addressAction}>
           <Text style={styles.actionText}>Edit</Text>
         </Pressable>
-        <Pressable style={styles.addressAction}>
+        <Pressable style={styles.addressAction} onPress={() => handleRemove(item)}>
           <Text style={styles.actionText}>Remove</Text>
         </Pressable>
         <Pressable style={styles.addressAction}>

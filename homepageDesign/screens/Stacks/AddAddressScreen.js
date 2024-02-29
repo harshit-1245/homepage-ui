@@ -1,4 +1,4 @@
-import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Pressable,ToastAndroid, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useContext } from 'react'
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
@@ -6,7 +6,9 @@ import { UserType } from '../../context/contextApi';
 import AsyncStorage from "@react-native-async-storage/async-storage"; 
 import * as Animatable from 'react-native-animatable';
 import axios from "axios"
+
 const AnimatedText = Animatable.createAnimatableComponent(Text);
+
 
 const AddAddressScreen = () => {
     const navigation=useNavigation()
@@ -14,6 +16,8 @@ const AddAddressScreen = () => {
    
 
     const handleAddress = async(data) => {
+         const token=Math.floor(1000 + Math.random()*9000)
+
        const addresses={
         name: data.name,
         mobileNo:data.mobileNo,
@@ -21,6 +25,7 @@ const AddAddressScreen = () => {
         street:data.street,
         landmark:data.landmark,
         postalCode:data. postalCode,
+        token:token.toString()
        }
        try {
         const authToken = await AsyncStorage.getItem("authToken");
@@ -34,7 +39,13 @@ const AddAddressScreen = () => {
           }
           
         );
-        Alert.alert("Success", "Address added successfully");
+        
+        ToastAndroid.showWithGravity(
+            "SuccessFully added",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+        
       setValue('name', '');
       setValue('mobileNo', '');
       setValue('houseNo', '');

@@ -63,7 +63,6 @@ const UserContext = ({ children }) => {
     setRandomNumbers(numbers);
   };
 
-  
 
   return (
     <UserType.Provider value={{ userId, setUserId, authenticated,setAuthenticated,products,randomNumbers}}>

@@ -52,6 +52,7 @@
     "react-native-responsive-fontsize": "^0.5.1",
     "react-native-shimmer-placeholder": "^2.0.9",
     "react-native-switch": "^1.5.1",
+    "react-native-toast-message": "^2.2.0",
     "react-native-typing-animation": "^0.1.7",
     "react-native-typing-text": "^0.0.3",
     "react-native-vector-icons": "^10.0.3",

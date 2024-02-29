@@ -31,25 +31,27 @@ const useCartStore = create((set) => ({
     set((state) => {
       const items = [...state.cartItems];
       const index = items.findIndex((p) => p.id === product.id);
-      
+
       if (index === -1) {
         // Product not found in cart
         return state;
       }
-  
-      if (type === 'inc') {
+
+      if (type === "inc") {
         items[index].quantity += 1;
-      } else if (type === 'dec') {
-        // Check if quantity is already at one
+        const updatedTotalAmount = state.totalAmount + 1; // Update total amount
+        return { cartItems: items, totalAmount: updatedTotalAmount };
+      } else if (type === "dec") {
         if (items[index].quantity === 1) {
           return state;
         }
         items[index].quantity -= 1;
+        const updatedTotalAmount = state.totalAmount - 1; // Update total amount
+        return { cartItems: items, totalAmount: updatedTotalAmount };
       }
-  
-      return { cartItems: items };
     });
   },
+
 
 }));
 

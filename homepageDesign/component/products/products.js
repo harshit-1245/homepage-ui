@@ -30,39 +30,8 @@ const Products = () => {
   useEffect(() => {
     loadCachedProducts();
   }, []);
-  const handleCart = async (item) => {
-    try {
-      const itemInCart=cartItems.some(cartItem=>cartItem.id === item.id);
-      if (itemInCart) {
-        // Show an alert if the item is already in the cart
-        Alert.alert('Item Already in Cart', 'This item is already in your cart.');
-      } else{
-        const response = await axios.post('http://192.168.29.163:4000/cart', {
-          title: item.title,
-          images: item.images[0],
-          description:item.description,
-          price:item.price,
-        });
-        if(response.status === 201){
-          
-          addToCart(item)
-        }
-      }
-      // Make an HTTP POST request to your backend API endpoint
-      
-       
-     
-    } catch (error) {
-      console.error('Error while sending data to backend:', error);
 
-      // Log the error response from the server if available
-      if (error.response) {
-        console.error('Error response from server:', error.response.data);
-      }
-    }
-  };
  
-
 
   const renderProductItem = ({ item }) => (
     <View style={styles.productItemContainer}>
@@ -87,7 +56,7 @@ const Products = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => handleCart(item)} style={[styles.button, styles.addToCartButton]}>
+          <TouchableOpacity onPress={() => addToCart(item)} style={[styles.button, styles.addToCartButton]}>
             <View style={styles.buttonText}>
               <Entypo name="shopping-cart" size={24} color="#27ae60" />
              

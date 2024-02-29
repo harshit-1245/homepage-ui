@@ -1,4 +1,5 @@
 const asyncHandler=require("express-async-handler")
+const jwt=require("jsonwebtoken")
 const bcrypt=require("bcrypt")
 require("dotenv").config()
 const randomstring = require('randomstring');
@@ -133,23 +134,23 @@ const verifyOTP=asyncHandler(async(req,res)=>{
 })
 
 const saveAddress=asyncHandler(async(req,res)=>{
-try {
-  const {userId,addresses}=req.body;
-  const user=await User.findById(userId)
-
-   if(!user){
-    return res.status(404).json({message:"user not found"})
-
-   }
-   user.addresses.push(addresses)
-   //save and updated user in the backend
-   await user.save()
-
-   res.status(200).json({message:"Adrress added Successfully"})
-} catch (error) {
-  res.status(404).json({message:"Something went wrong while getting address"})
-}
-})
+  try {
+    const {userId,addresses}=req.body;
+    const user=await User.findById(userId)
+  
+     if(!user){
+      return res.status(404).json({message:"user not found"})
+  
+     }
+     user.addresses.push(addresses)
+     //save and updated user in the backend
+     await user.save()
+  
+     res.status(200).json({message:"Adrress added Successfully"})
+  } catch (error) {
+    res.status(404).json({message:"Something went wrong while getting address"})
+  }
+  })
 
 const getAddress=asyncHandler(async(req,res)=>{
 try {
@@ -165,5 +166,34 @@ try {
   res.status(500).json({message:"Something went wrong while getting Address"})
 }
 })
+const removeAdd = asyncHandler(async(req, res) => {
+  try {
+    const { userId, addressId } = req.body; // Extract userId and addressId from request body
+    console.log(addressId);
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-module.exports={getUser,register,loginUser,logoutUser,generateOTP,verifyOTP,saveAddress,getAddress}
+    // Find the address with the matching addressId
+    const addressIndex = user.addresses.findIndex(address => address._id.toString() === addressId.toString());
+
+    if (addressIndex === -1) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+
+    // Remove the address from the user's addresses array
+    user.addresses.splice(addressIndex, 1);
+
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({ message: "Address removed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong while removing address" });
+  }
+});
+
+
+module.exports={getUser,register,loginUser,logoutUser,generateOTP,verifyOTP,saveAddress,getAddress,removeAdd}

@@ -7,13 +7,15 @@ import RelatedProducts from '../../component/RelatedProduct/RelatedProducts';
 import useCartStore from '../../src/store/cartStore';
 
 const ProductScreen = () => {
-  const {addToCart}=useCartStore()
+  const {addToCart,cartItems}=useCartStore()
   const [wishList, setWishList] = useState(false);
-  const [cartItemsCount, setCartItemsCount] = useState(3); // Example number of items in the cart
+  
   const navigation = useNavigation();
   const route = useRoute();
   const item = route.params.item; // Access productId from params object
   const [selectedSize, setSelectedSize] = useState(null);
+    // Calculate total count of items in the cart
+    const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0)
 
  
 
@@ -37,15 +39,15 @@ const ProductScreen = () => {
           style={styles.headerButton}
           onPress={() => {/* Handle cart action */}}>
           <Ionicons name="cart-outline" size={24} color="black" />
-          {cartItemsCount > 0 && (
+          {cartItemCount > 0 && (
             <View style={styles.cartItemCountContainer}>
-              <Text style={styles.cartItemCount}>{cartItemsCount}</Text>
+              <Text style={styles.cartItemCount}>{cartItemCount}</Text>
             </View>
           )}
         </TouchableOpacity>
       )
     });
-  }, [cartItemsCount, navigation]);
+  }, [cartItemCount, navigation]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

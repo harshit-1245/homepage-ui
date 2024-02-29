@@ -4,7 +4,7 @@ const colors=require("colors")
 const session=require("express-session")
 const cookieParser=require("cookie-parser")
 const userRouter=require("./routing/useRoute")
-const cartRouting=require("./routing/cartRouter")
+
 const { connectDB } = require( "./database/db" )
 const app=express()
 
@@ -27,7 +27,7 @@ app.use(session({
   }));
 
 app.use("/",userRouter)
-app.use("/",cartRouting)
+
 
 
 

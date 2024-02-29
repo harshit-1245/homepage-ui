@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema({
       city: String,
       country: String,
       postalCode: String,
+      token: String, // Add token field to each address
     },
   ],
   orders: [
