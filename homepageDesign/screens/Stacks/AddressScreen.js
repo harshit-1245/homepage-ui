@@ -7,14 +7,12 @@ import { UserType } from '../../context/contextApi';
 import axios from "axios"
 
 const AddressScreen = () => {
-  const [token, setToken] = useState("")
+  
   const { userId } = useContext(UserType);
   const { data, error } = useSWR(`http://192.168.29.163:4000/getAddress/${userId}`, async (url) => {
     const response = await fetch(url);
     const data = await response.json();
-    if (data.addresses && data.addresses.length > 0) {
-      setToken(data.addresses[0].token); // Extract token from the first address and set it
-    }
+    
     return data;
   });
 
