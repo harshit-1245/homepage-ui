@@ -37,7 +37,7 @@ const ProductScreen = () => {
       headerRight: () => (
         <TouchableOpacity
           style={styles.headerButton}
-          onPress={() => {/* Handle cart action */}}>
+          onPress={() => {navigation.navigate("Cart")}}>
           <Ionicons name="cart-outline" size={24} color="black" />
           {cartItemCount > 0 && (
             <View style={styles.cartItemCountContainer}>
