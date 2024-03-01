@@ -22,22 +22,7 @@ const CartItem = () => {
   const [cartItem, setCartItem] = useState([]);
   const {addToCart}=useCartStore()
 
-  const fetchData = useCallback(async () => {
-    try {
-      const response = await axios.get("http://192.168.29.163:4000/getCart");
-      const fetchedItems = response.data.data.cartItem;
-      setCartItem(fetchedItems);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }, []);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-  useEffect(() => {
-    fetchData();
-  }, [cartItem]);
 
   return (
     <View style={styles.container}>

@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons,MaterialCommunityIcons } from '@expo/vector-icons';
 import { Image, Text, View } from 'react-native';
 import SplashScreen from '../screens/Stacks/SplashScreen';
 import AddressScreen from '../screens/Stacks/AddressScreen';

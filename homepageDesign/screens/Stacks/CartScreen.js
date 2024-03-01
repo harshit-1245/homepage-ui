@@ -6,6 +6,7 @@ import useCartStore from '../../src/store/cartStore';
 import { useNavigation } from "@react-navigation/native";
 
 const CartScreen = () => {
+  const {authenticated}=useContext(UserType)
   const navigation = useNavigation();
 
   const { cartItems, removeFromCart, handleCartProductQuantity } = useCartStore();
@@ -83,7 +84,9 @@ const CartScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      {authenticated ? (
+        <>
+        <View>
         <View style={styles.header}>
           <AntDesign name="menu-fold" size={24} color="black" style={styles.icon} />
           <Text style={styles.headerText}>My Cart</Text>
@@ -111,6 +114,15 @@ const CartScreen = () => {
           <Text style={styles.placeOrderText}>Place Order</Text>
         </Pressable>
       </View>
+      </>
+      ):(
+        <View style={{ flex:1, justifyContent: 'center', alignItems: 'center' }}>
+        <Image style={{ width: 500, height: 300 }} source={require("../../assets/empty-cart.gif")} />
+        <Text style={{fontSize:18,fontWeight:"bold"}}>Please log in to see the excitment offers</Text>
+      </View>
+      
+      )}
+      
     </SafeAreaView>
   );
 };
