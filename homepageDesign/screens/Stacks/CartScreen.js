@@ -5,7 +5,9 @@ import { UserType } from "../../context/contextApi";
 import useCartStore from '../../src/store/cartStore';
 import { useNavigation } from "@react-navigation/native";
 
+
 const CartScreen = () => {
+ 
   const {authenticated}=useContext(UserType)
   const navigation = useNavigation();
 
@@ -38,6 +40,11 @@ const CartScreen = () => {
   
   const handleChange=()=>{
     navigation.navigate("Address")
+  }
+
+  const handlePlaceOrder=()=>{
+
+   navigation.navigate("Order")
   }
 
   const renderItem = ({ item }) => (
@@ -110,10 +117,11 @@ const CartScreen = () => {
       {/* Total price and Place Order button */}
       <View style={styles.totalContainer}>
         <Text style={styles.totalText}>Total Price: ${totalPrice.toFixed(2)}</Text>
-        <Pressable style={styles.placeOrderButton}>
+        <Pressable style={styles.placeOrderButton} onPress={handlePlaceOrder}>
           <Text style={styles.placeOrderText}>Place Order</Text>
         </Pressable>
       </View>
+  
       </>
       ):(
         <View style={{ flex:1, justifyContent: 'center', alignItems: 'center' }}>
