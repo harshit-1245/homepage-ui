@@ -1,5 +1,5 @@
 const express=require("express")
-const { getUser,register, loginUser,logoutUser,generateOTP,verifyOTP,saveAddress,getAddress,removeAdd} = require( "../controller/userController" )
+const { getUser,register, loginUser,logoutUser,generateOTP,verifyOTP,saveAddress,getAddress,removeAdd,getProfile, storeOrder} = require( "../controller/userController" )
 const verifyjwt = require( "../middleware/auth" )
 const router=express()
 
@@ -12,5 +12,7 @@ router.route("/verify").post(verifyOTP)
 router.route("/address").post(saveAddress)
 router.route("/getAddress/:userId").get(getAddress)
 router.route("/removeAdd").post(removeAdd)
+router.route("/profile/:userId").get(getProfile)
+router.route("/order").post(storeOrder)
 
 module.exports=router

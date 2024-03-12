@@ -2,19 +2,12 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-const renderDetailRow = (label, value, bold = false) => (
-  <View style={styles.detailRow}>
-    <Text style={[styles.detailLabel, bold && styles.boldLabel]}>{label}</Text>
-    <Text style={[styles.detailValue, bold && styles.boldValue]}>{value}</Text>
-  </View>
-);
-
 const AddressSelection = ({ addresses, selectedAddress, onSelectAddress, onNextStep }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Select a Delivery Address</Text>
 
-      {addresses.map((address, index) => (
+      {Object.values(addresses).map((address, index) => (
         <Pressable
           key={index}
           style={[
@@ -33,10 +26,10 @@ const AddressSelection = ({ addresses, selectedAddress, onSelectAddress, onNextS
 
           <View style={styles.addressDetails}>
             <Text style={styles.addressName}>{address.name}</Text>
-            <Text style={styles.addressInfo}>{address.location}</Text>
-            <Text style={styles.addressInfo}>{address.street}</Text>
-            <Text style={styles.addressInfo}>{address.city}</Text>
-            <Text style={styles.addressInfo}>Phone No: {address.phoneNumber}</Text>
+            <Text style={styles.addressInfo}>{address.street}, {address.houseNo}</Text>
+            <Text style={styles.addressInfo}>{address.landmark}, {address.city}</Text>
+            <Text style={styles.addressInfo}>Postal Code: {address.postalCode}</Text>
+            <Text style={styles.addressInfo}>Phone No: {address.mobileNo}</Text>
 
             {selectedAddress === index && (
               <Pressable
@@ -47,8 +40,6 @@ const AddressSelection = ({ addresses, selectedAddress, onSelectAddress, onNextS
               </Pressable>
             )}
 
-            
-            {/* Add more detail rows as needed */}
           </View>
         </Pressable>
       ))}
@@ -94,27 +85,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
     color: "white",
-  },
-  detailRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  detailLabel: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: 'gray',
-  },
-  detailValue: {
-    color: 'gray',
-    fontSize: 16,
-  },
-  boldLabel: {
-    fontWeight: 'bold',
-  },
-  boldValue: {
-    fontWeight: 'bold',
-  },
+  }
 });
 
 export default AddressSelection;

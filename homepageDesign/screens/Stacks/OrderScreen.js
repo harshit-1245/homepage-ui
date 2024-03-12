@@ -1,26 +1,29 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import Address from '../../paymentLogic/Address.js/address';
 import Delivery from '../../paymentLogic/delivery/delivery';
 import Payment from '../../paymentLogic/paymentOption/payment';
 import Order from '../../paymentLogic/oder/order';
 import Thankyou from '../../paymentLogic/thnakyou/thankyou';
+import useSWR from "swr"
+import { UserType } from '../../context/contextApi';
 
 
 const OrderScreen = () => {
+  const [demoAddresses,setDemoAddresses]=useState({})
     const navigation=useNavigation()
-    const demoAddresses = [
-        {
-          _id: 1,
-          name: "Harshit Singh",
-          location: "12, XYZ, NH-7",
-          street: "Anywhere....",
-          city: "Bhubneswar, India",
-          phoneNumber: "+91-XXXXXXXXXX"
-        },
-        // Add more addresses as needed
-      ];
+    const { userId } = useContext(UserType);
+    const {data,error}=useSWR(`http://192.168.29.163:4000/getAddress/${userId}`,async(url)=>{
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      setDemoAddresses(data.addresses)
+    })
+    
+ 
+
+
     
       // Array to define the steps in the confirmation process
       const steps = [
@@ -29,10 +32,31 @@ const OrderScreen = () => {
         { title: "Payment", content: "Payment Details" },
         { title: "Place Order", content: "Order Summary" },
       ];
+
+
       const [currentStep, setCurrentStep] = useState(0);
       const [selectedAddress, setSelectedAddress] = useState(null);
       const [option, setOption] = useState(false);
       const [selectedOption, setSelectedOption] = useState("");
+
+      //api to set 
+      const handleOrder=async()=>{
+        try {
+          const orderData = {
+            userId: userId,
+            cartItems:cart,
+            totalPrice:total,
+            shippingAddress:selectedAddress,
+            paymentMethod:selectedOptions
+          }
+          const response=await axios.post('http://192.168.29.163:4000/orders',orderData)
+          if(response.status === 201){
+            navigation.navigate("Order")
+           }
+        } catch (error) {
+          console.log("error",error)
+        }
+      }
 
       useEffect(() => {
         if (currentStep === 4) {
@@ -89,7 +113,10 @@ const OrderScreen = () => {
       )}
 
 {currentStep === 3 && selectedOption === "cash" && (
-        <Order setCurrentStep={setCurrentStep} />
+        <Order 
+        setCurrentStep={setCurrentStep} 
+        handleOrder={handleOrder}
+        />
       )}
 
 {currentStep === 4 && (
@@ -103,7 +130,7 @@ export default OrderScreen
 
 const styles = StyleSheet.create({
     container: {
-      marginTop: 0,
+      marginTop: 50,
       paddingHorizontal: 20,
       paddingTop: 40,
     },
