@@ -5,6 +5,8 @@ import useSWR from "swr"
 import { UserType } from '../../context/contextApi';
 import { Entypo,FontAwesome5,MaterialIcons } from '@expo/vector-icons';
 import axios from "axios"
+import {PaymentModal} from "../../Modals/paymentModal"
+
 
 const OrderScreen = () => {
   const route = useRoute();
@@ -15,6 +17,7 @@ const OrderScreen = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [options, setOptions] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
   
 
   
@@ -215,16 +218,6 @@ const OrderScreen = () => {
       ):(
         <Entypo onPress={() => {
           setSelectedOptions("card");
-          Alert.alert('UPI/Debit card, pay online', '', [
-            {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel is pressed'),
-            },
-            {
-              text: 'OK',
-              onPress: pay,
-            },
-          ]);
         }} name='circle' size={20} color="gray"/>
       )}
       
@@ -281,12 +274,28 @@ const OrderScreen = () => {
     </View>
 )}
 
-
+{currentStep == 3 && selectedOptions === "card" && (
+   <View>
+   
+   <Text style={styles.totalText}>Total Amount: ${total}</Text>
+   <View style={styles.content}>
+   <Image
+    
+    source={require('../../assets/money.gif')}
+    style={styles.image}
+  />
+   </View>
+   <Pressable style={styles.button} onPress={()=>setModalVisible(true)}>
+     <Text style={styles.buttonText}>Buy now</Text>
+   </Pressable>
+   <PaymentModal setCurrentStep={setCurrentStep} visible={modalVisible} onClose={() => setModalVisible(false)}/>
+ </View>
+)}
 
 {currentStep == 4 && 
   <View style={styles.container}>
   <View>
-    <Image style={styles.image} source={require('../../assets/order.png')} />
+    <Image style={styles.image1} source={require('../../assets/order.png')} />
   </View>
   <Text style={styles.thankYouText}>Thank You, Come Again</Text>
 </View>
@@ -304,7 +313,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  image: {
+  image1: {
     width: "100%",
     height: 200,
   },
@@ -313,4 +322,48 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
+  totalText: {
+    fontSize: 20,
+    marginBottom: 20,
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  image: {
+    width:400
+  },
+  description: {
+    flex: 1,
+  },
+  productName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  productDescription: {
+    fontSize: 14,
+    color: '#666',
+  },
+ button: {
+  width: 200,
+  height: 50,
+  backgroundColor: '#007bff',
+  borderRadius: 25,
+  justifyContent: 'center',
+  alignItems: 'center',
+  alignSelf: 'center', // Center the button horizontally
+  marginTop: 50,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
+},
+buttonText: {
+  color: '#fff',
+  fontSize: 18,
+  fontWeight: 'bold',
+},
 });
