@@ -6,6 +6,7 @@ import useCartStore from '../../src/store/cartStore';
 import { useNavigation } from "@react-navigation/native";
 
 
+
 const CartScreen = () => {
  
   const {authenticated}=useContext(UserType)
@@ -44,7 +45,10 @@ const CartScreen = () => {
 
   const handlePlaceOrder=()=>{
 
-   navigation.navigate("Order")
+   navigation.navigate("Order",{
+    total:totalPrice,
+    cart:cartItems,
+   })
   }
 
   const renderItem = ({ item }) => (

@@ -12,7 +12,7 @@ const ProductScreen = () => {
   
   const navigation = useNavigation();
   const route = useRoute();
-  const item = route.params.item; // Access productId from params object
+  const item = route.params.item; 
   const [selectedSize, setSelectedSize] = useState(null);
     // Calculate total count of items in the cart
     const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0)

@@ -1,17 +1,21 @@
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useRoute } from '@react-navigation/native';
 import useSWR from "swr"
 import { UserType } from '../../context/contextApi';
 import { Entypo,FontAwesome5,MaterialIcons } from '@expo/vector-icons';
-
+import axios from "axios"
 
 const OrderScreen = () => {
+  const route = useRoute();
+  const total = route.params.total;
+  const cart=route.params.cart;
   const [currentStep, setCurrentStep] = useState(0);
   const [addresses,setAddresses]=useState({})
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [options, setOptions] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState("");
+  
 
   
     const navigation=useNavigation()
@@ -35,23 +39,37 @@ const OrderScreen = () => {
 
     
       //api to set 
-      const handleOrder=async()=>{
+      const handleOrder = async () => {
         try {
-          const orderData = {
-            userId: userId,
-            cartItems:cart,
-            totalPrice:total,
-            shippingAddress:selectedAddress,
-            paymentMethod:selectedOptions
-          }
-          const response=await axios.post('http://192.168.29.163:4000/order',orderData)
-          if(response.status === 201){
-            navigation.navigate("Order")
-           }
+            const orderData = {
+                userId: userId,
+                cartItems: cart,
+                totalPrice: total,
+                shippingAddress: selectedAddress,
+                paymentMethod: selectedOptions
+            };
+            const response = await axios.post('http://192.168.29.163:4000/order', orderData);
+            
+            if (response.status === 201) {
+                setCurrentStep(4)
+            }
         } catch (error) {
-          console.log("error",error)
+            if (error.response) {
+                
+                console.log("Backend response data:", error.response.data);
+                console.log("Backend response status:", error.response.status);
+                
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.log("No response received:", error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log("Error:", error.message);
+            }
         }
-      }
+    };
+    
+    
 
       useEffect(() => {
         if (currentStep === 4) {
@@ -263,6 +281,8 @@ const OrderScreen = () => {
     </View>
 )}
 
+
+
 {currentStep == 4 && 
   <View style={styles.container}>
   <View>
@@ -280,3 +300,17 @@ const OrderScreen = () => {
 
 export default OrderScreen
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  image: {
+    width: "100%",
+    height: 200,
+  },
+  thankYouText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+});
