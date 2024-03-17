@@ -52,7 +52,7 @@ const UserContext = ({ children }) => {
     generateRandomNumbers();
     
   }, []);
-  
+  console.log(userId);
 
   const generateRandomNumbers = () => {
     let numbers = [];
