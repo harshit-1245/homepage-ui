@@ -32,7 +32,7 @@
     "deprecated-react-native-prop-types": "^2.2.0",
     "expo": "^50.0.2",
     "expo-checkbox": "~2.7.0",
-    "expo-dev-client": "~3.3.8",
+    "expo-dev-client": "~3.3.10",
     "expo-image-picker": "~14.7.1",
     "expo-status-bar": "~1.11.1",
     "hoist-non-react-statics": "^3.3.2",
