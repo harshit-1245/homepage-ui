@@ -39,7 +39,7 @@ const UserContext = ({ children }) => {
       }
     } catch (error) {
       console.error('Error decoding token:', error);
-      // Handle error as needed
+      
     }
   };
  

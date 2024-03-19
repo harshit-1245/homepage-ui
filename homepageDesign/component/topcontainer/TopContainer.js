@@ -6,13 +6,20 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import {useNavigation} from "@react-navigation/native"
 import { UserType } from "../../context/contextApi";
+import InfiniteLoopWords from "../../TypingEffect/InfiniteLoopWords";
+
+
+
 
 const Height = Dimensions.get('window').height;
 const Width = Dimensions.get('window').width;
 
+const words = ['T-shirt', 'Shirt', 'Shoes'];
+
 const TopContainer = () => {
   const { authenticated } = useContext(UserType);
   const navigation = useNavigation();
+  
   
   return (
     <View style={styles.topContainer}>
@@ -23,7 +30,7 @@ const TopContainer = () => {
               <Image style={styles.fkLogoImage} source={require('../../assets/google.png')} />
               <Text style={styles.flipkartName}>Harry</Text>
             </Pressable>
-
+        
             {authenticated && (
               <Pressable style={styles.Groceryflipkart}>
                 {/* <Image style={styles.groceryLogoImage} source={require('../../assets/grocery.png')} /> */}
@@ -46,8 +53,13 @@ const TopContainer = () => {
               </Text>
 
               <View style={styles.textInputBox} />
-              <Text style={styles.searchText}>Search for products</Text>
+              {/* here use typewriting effect */}
+              {/* <Text style={styles.searchText}>Search for products</Text> */}
+              <Text style={styles.searchText}>Search for</Text>
+          <InfiniteLoopWords words={words} loopDuration={2000} />
+              
 
+                <View style={styles.icons}>
               <Text style={styles.cameraIcon}>
                 <AntDesign name="camera" style={{ fontSize: RFPercentage(4), fontWeight: '600' }} />
               </Text>
@@ -55,6 +67,7 @@ const TopContainer = () => {
               <Text style={styles.micIcon}>
                 <MaterialCommunityIcons name="microphone-outline" style={{ fontSize: RFPercentage(4) }} />
               </Text>
+              </View>
             </Pressable>
           </View>
         </View>
@@ -242,9 +255,16 @@ const styles=StyleSheet.create({
     micIcon:{
         marginVertical:'2.5%'
     },
-
-    textInputBox:{
-       
+    searchText:{
+      fontSize:16,
+      fontWeight:"bold"
+    },
+    icons:{
+      flexDirection:"row",
+      position:"fixed"
     }
+    
+
+   
 
 })
