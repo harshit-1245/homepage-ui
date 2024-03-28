@@ -60,13 +60,7 @@ const TopContainer = () => {
               
 
                 <View style={styles.icons}>
-              <Text style={styles.cameraIcon}>
-                <AntDesign name="camera" style={{ fontSize: RFPercentage(4), fontWeight: '600' }} />
-              </Text>
-
-              <Text style={styles.micIcon}>
-                <MaterialCommunityIcons name="microphone-outline" style={{ fontSize: RFPercentage(4) }} />
-              </Text>
+              
               </View>
             </Pressable>
           </View>

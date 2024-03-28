@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useLayoutEffect, useContext } from 'react';
-import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View, Pressable, Alert } from 'react-native';
+import { FlatList, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator, View, Pressable, Alert,ToastAndroid } from 'react-native';
 import useProductStore from '../../src/store/productStore';
 import { useNavigation, useRoute } from "@react-navigation/native"; // Import useNavigation hook
 import { productData } from '../../apis/productApi';
@@ -17,6 +17,14 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
+   const handleCart=(item)=>{
+    addToCart(item)
+    ToastAndroid.showWithGravity(
+      "Item added successfully",
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM
+    );
+   }
 
   const loadProducts = useCallback(() => {
     fetchProducts(page, pageSize);
@@ -56,7 +64,7 @@ const Products = () => {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => addToCart(item)} style={[styles.button, styles.addToCartButton]}>
+          <TouchableOpacity onPress={()=>handleCart(item)} style={[styles.button, styles.addToCartButton]}>
             <View style={styles.buttonText}>
               <Entypo name="shopping-cart" size={24} color="#27ae60" />
              

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ViewPropTypes } from 'react-native';
 import { UserType } from '../../context/contextApi';
 import TopContainer from '../../component/topcontainer/TopContainer';
@@ -8,9 +8,11 @@ import Suggetion from '../../component/suggetionBox/suggetion';
 import CartItem from '../../component/cartItem/CartItem';
 import Products from '../../component/products/products';
 
+
 const HomeScreen = () => {
   const { authenticated } = useContext(UserType);
 
+ 
   // Data for FlatList
   const data = [
     { type: 'topContainer' },
