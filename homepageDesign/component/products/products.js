@@ -7,9 +7,8 @@ import useCartStore from '../../src/store/cartStore';
 import { Ionicons, FontAwesome5, Entypo } from '@expo/vector-icons'; // Import icons from expo
 
 import { UserType } from '../../context/contextApi';
-
 const Products = () => {
-  const {userId}=useContext(UserType)
+ 
   const navigation = useNavigation(); // Initialize useNavigation hook
   const { cartItems,addToCart } = useCartStore();
 
