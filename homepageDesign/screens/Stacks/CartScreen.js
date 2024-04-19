@@ -58,9 +58,9 @@ const CartScreen = () => {
         <View style={styles.productDetails}>
           <Text style={styles.productTitle}>{item.title}</Text>
           <Text numberOfLines={4} style={styles.productSize}>Desc: {item.description}</Text>
-          <Text style={styles.productRating}>Rating: {stars}</Text>
+          <Text style={styles.productRating}>Rating: will see soon</Text>
           <Text style={styles.price}> price: ${item.price}</Text>
-          <Text style={styles.productStock}>Offers:<Text style={{color:"green"}}>{randomNumbers + "% off"}</Text></Text>
+          <Text style={styles.productStock}>Offers:<Text style={{color:"green"}}>23%</Text></Text>
           <View style={styles.actionContainer}>
             <Pressable style={styles.findSimilarButton}>
               <Text style={styles.findSimilarText}>Find Similar</Text>
