@@ -1,17 +1,22 @@
-// firebase.js
-import { initializeApp } from '@firebase/app';
-import { getAuth, GoogleAuthProvider } from '@firebase/auth';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAuth } from "@firebase/auth";
+import {getFireStore} from "firebase/firestore"
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyB75uOqmiWaZn5PolB-FnvUIuaYLdhMnCg',
-  authDomain: 'lelekart-app.firebaseapp.com',
-  projectId: 'lelekart-app',
-  storageBucket: 'lelekart-app.appspot.com',
-  messagingSenderId: '560152851822',
-  appId: '1:560152851822:web:5e939bb9a8f65e25bdbd7f',
+  apiKey: "AIzaSyBaN0T769y_b_DuprxNTzAORx57lMrOyRs",
+  authDomain: "authentication-3754b.firebaseapp.com",
+  projectId: "authentication-3754b",
+  storageBucket: "authentication-3754b.appspot.com",
+  messagingSenderId: "777657461221",
+  appId: "1:777657461221:web:55f6c5fde97b3487ad270c",
+  measurementId: "G-N1YTQJZ71X"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+// Initialize Firebase
+export const FIREBASE_APP = initializeApp(firebaseConfig);
+export const FIREBASE_AUTH=getAuth(FIREBASE_APP)
 
-export { auth, GoogleAuthProvider };
+export const FIRESTORE_DB=getFireStore(FIREBASE_APP)
