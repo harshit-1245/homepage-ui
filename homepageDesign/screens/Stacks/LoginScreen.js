@@ -19,7 +19,7 @@ const LoginScreen = () => {
   const handleEmailLogin = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.14.201:4000/login', // Replace with your server endpoint
+        'http://192.168.6.201:4000/login', // Replace with your server endpoint
         {
           email: email,
           password: password,
