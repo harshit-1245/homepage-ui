@@ -30,7 +30,7 @@ const AddAddressScreen = () => {
        try {
         const authToken = await AsyncStorage.getItem("authToken");
         const response = await axios.post(
-          "http://192.168.14.201:4000/address",
+          "http://192.168.204.201:4000/address",
           { userId, addresses },
           {
             headers: {

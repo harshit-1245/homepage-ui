@@ -23,7 +23,7 @@ const OrderScreen = () => {
   
     const navigation=useNavigation()
     const { userId } = useContext(UserType);
-    const {data,error}=useSWR(`http://192.168.29.163:4000/getAddress/${userId}`,async(url)=>{
+    const {data,error}=useSWR(`http://192.168.204.201:4000/getAddress/${userId}`,async(url)=>{
       const response = await fetch(url);
       const data = await response.json();
       
@@ -42,7 +42,7 @@ const OrderScreen = () => {
       //delete address
       const handleRemove=async(item)=>{
         try {
-          const response=await axios.post(`192.168.14.201:4000/removeAdd`,{
+          const response=await axios.post(`http://192.168.204.201:4000/removeAdd`,{
             userId:userId,
             addressId:selectedAddress._id
           })
@@ -68,7 +68,7 @@ const OrderScreen = () => {
                 shippingAddress: selectedAddress,
                 paymentMethod: selectedOptions
             };
-            const response = await axios.post('192.168.14.201:4000/order', orderData);
+            const response = await axios.post('http://192.168.204.201:4000/order', orderData);
             
             if (response.status === 201) {
                 setCurrentStep(4)

@@ -55,7 +55,7 @@ const RegisterScreen = () => {
   
     try {
       const response = await axios.post(
-        'http://192.168.14.201:4000/register',
+        'http://192.168.204.201:4000/register',
         {
           email: data.email,
           phone: data.mobileNumber,
