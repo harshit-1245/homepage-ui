@@ -19,7 +19,7 @@ const AddressScreen = () => {
   //for removing address
   const handleRemove = async (item) => {
     try {
-      const response = await axios.post(`http://192.168.204.201:4000/removeAdd`, {
+      const response = await axios.post(`http://192.168.74.201:4000/removeAdd`, {
         userId: userId,
         addressId: item._id, // Pass the ID of the selected address
         

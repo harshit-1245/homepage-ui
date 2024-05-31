@@ -34,7 +34,7 @@ const SearchScreen = () => {
   
     // Function to handle image picking
     const pickImageOrTakePicture = async (option) => {
-      toggleModal(); // Close the modal
+      toggleModal(); 
   
       let result;
       if (option === 'camera') {
