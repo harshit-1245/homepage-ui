@@ -7,7 +7,7 @@ import { Image, Text, View } from 'react-native';
 import SplashScreen from '../screens/Stacks/SplashScreen';
 import AddressScreen from '../screens/Stacks/AddressScreen';
 import AddAddressScreen from '../screens/Stacks/AddAddressScreen';
-import { QueryClient, QueryClientProvider } from 'react-query';
+// import { QueryClient, QueryClientProvider } from 'react-query';
 import OrderScreen from '../screens/Stacks/OrderScreen';
 
 const HomeScreen = lazy(() => import('../screens/Stacks/HomeScreen'));
