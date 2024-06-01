@@ -9,7 +9,7 @@ import axios from "axios"
 const AddressScreen = () => {
   
   const { userId } = useContext(UserType);
-  const { data, error } = useSWR(`http://192.168.204.201:4000/getAddress/${userId}`, async (url) => {
+  const { data, error } = useSWR(`http://192.168.74.201:4000/getAddress/${userId}`, async (url) => {
     const response = await fetch(url);
     const data = await response.json();
     
